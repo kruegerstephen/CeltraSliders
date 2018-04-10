@@ -8,50 +8,76 @@
 
 document.addEventListener('DOMContentLoaded', function(){ 
 
-let canvas = document.getElementById("canvas");
-let context = canvas.getContext("2d");
+    var container = document.getElementById('container');
+    var circles = [];
+    var radius = 100;
+    var containerCenterW = container.offsetLeft + container.clientWidth/2;
+    var containerCenterH = container.offsetTop + container.clientHeight/2;
 
-let circleX = 150;
-let circleY = 150;
+    var containerSize = container.clientWidth;
 
+    var radian = 49*Math.PI/180;
 
-let options = {
+    
+    
+circles.push({
     container: "",
-    color: "",
+    color: "blue",
+    strokewidth:5,
     maxVal: "",
     minVal: "",
     step: "",
-    radius: 90,
-}
+    x: 150,
+    y: 150,
+    radius: 100,
+    strokewidth: 25
+})
 
-let degreesToRadians = function(degrees){
+    
+circles.forEach(
+    function(circle)
+    {
+        drawCircle(circle);
+    }
+);
+
+
+
+function drawCircle(circle){
+    
+    var r = getNode('circle', { id : "circle1",
+                                cx : circle.x,
+                                cy : circle.y,
+                                r  : circle.radius,
+                                fill : "none",
+                                stroke : circle.color,
+                                'stroke-width': circle.strokewidth
+                                });
+    
+    var x = getNode('circle', { id : "circle1Spinner",
+                                cx : Math.round(Math.sin(radian)*radius) + containerSize/2,
+                                cy : Math.round(Math.cos(radian)*radius)+ containerSize/2,
+                                r : circle.radius/10,
+                                fill : "red",
+                                stroke : "none"});
+    container.appendChild(r);
+    container.appendChild(x);
+    
+}
+    
+    
+function degreesToRadians(degrees){
    let rads = (degrees * Math.PI/180);
     return rads;
 }
 
-let drawCircle = function drawCircle(options){
-    
-    let startAng = degreesToRadians(0);
-    let endAng = degreesToRadians(360);
-    
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    //draw circle
-    context.beginPath();
-    context.arc(circleX, circleY, options.radius, startAng, endAng);
-    context.stroke();
-    
-    //draw indicator
-    context.beginPath();
-    context.arc(circleX, circleY, options.radius, startAng, endAng/20);
-    context.strokeStyle = "blue";
-    context.lineWidth = 5;
-    context.stroke();
+function getNode(n, v) {
+  n = document.createElementNS("http://www.w3.org/2000/svg", n);
+  for (var p in v)
+    n.setAttributeNS(null, p, v[p]);
+  return n
 }
-
-
-
-drawCircle(options);
+    
 
     
     
