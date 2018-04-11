@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     var container = document.getElementById('container');
     const circles = [];
+    const knobs = [];
     var radius = 100;
     const containerCenterW =  container.clientWidth/2;
     const containerCenterH =  container.clientHeight/2;
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     var startAngle = 180*Math.PI/180;
 
-    let allowMove = true;
+    let allowMove = false;
     
 circles.push({
     id : "circ1",
@@ -62,10 +63,12 @@ function drawCircle(circle, angle){
                                 r : circle.radius/10,
                                 fill : "red",
                                 stroke : "none"});
+    knobs.push(x);
     container.appendChild(r);
     container.appendChild(x);
     
 }
+     
     
     
 function degreesTostartAngles(degrees){
@@ -81,17 +84,35 @@ function getNode(n, v) {
 }
     
 
-var circ1 = document.getElementById("circle1Spinner");
-circ1.addEventListener('touchstart', start , false);
-circ1.addEventListener('touchmove', move , false);
-circ1.addEventListener('mousedown', start , false);
-circ1.addEventListener('mouseup', end , false);
-circ1.addEventListener('mousemove', move , false);
+var knob1 = document.getElementById("circle1Spinner");
+var circ1 = document.getElementById("circ1");
+var moveThisKnob;
+knob1.addEventListener('touchstart', start , false);
+knob1.addEventListener('touchmove', move , false);
+knob1.addEventListener('mousedown', start , false);
+container.addEventListener('mouseup', end , false);
+
+container.addEventListener('mousemove', move , false);
+    
+function moveKnob(circ,angle){
+     var radian = angle*Math.PI/180;
+        
+    var top = -Math.round(Math.sin(radian)*radius) + containerSize/2;
+    var left = Math.round(Math.cos(radian)*radius)+ containerSize/2;
+    let currKnob = moveThisKnob; /*knobs.filter(knob=> knob.attributes.parentId.value == circ.id);)*/
+    currKnob.cx.baseVal.value = left;
+    currKnob.cy.baseVal.value = top;
+}    
 
 
+    
+    
 function start(e){
+  moveThisKnob = this;
   allowMove = true;
 }
+    
+    
 
 function move(e){ 
   if(allowMove){
@@ -100,13 +121,14 @@ function move(e){
     
     var radian = Math.atan2(y, x);
     var angle = radian*180/Math.PI;
-    var currentCirc = circles.filter(circ => circ.id == this.getAttribute('parentId'));
-    drawCircle(currentCirc[0], angle);
+    var currentCirc = circles.filter(circ => circ.id == this.id);
+    console.log(angle)
+    moveKnob(currentCirc[0], angle);
   }
 }    
     
 function end(e){
-  allowMove = true;
+  allowMove = false;
 }
     
     
