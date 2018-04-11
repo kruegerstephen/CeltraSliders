@@ -25,9 +25,34 @@ document.addEventListener('DOMContentLoaded', function(){
         maxVal: 100,
         minVal: 0,
         step: 20,
-        x: 150,
-        y: 150,
+        x: containerCenterW,
+        y: containerCenterH,
         radius: 100,
+        strokewidth: 2
+    })
+    
+     //define circles
+    circles.push({
+        id : "circ2",
+        color: "blue",
+        maxVal: 100,
+        minVal: 0,
+        step: 20,
+        x: containerCenterW,
+        y: containerCenterH,
+        radius: 125,
+        strokewidth: 2
+    })
+    
+     circles.push({
+        id : "circ3",
+        color: "red",
+        maxVal: 100,
+        minVal: 0,
+        step: 20,
+        x: containerCenterW,
+        y: containerCenterH,
+        radius: 150,
         strokewidth: 2
     })
 
@@ -53,8 +78,7 @@ document.addEventListener('DOMContentLoaded', function(){
                                     'stroke-width': circle.strokewidth
                                     });
 
-        let x = getNode('circle', { id : "circle1Spinner",
-                                    pID : circle.id,
+        let x = getNode('circle', { pID : circle.id,
                                     cx : Math.round(Math.sin(angle)*circle.radius) + containerSize/2,
                                     cy : Math.round(Math.cos(angle)*circle.radius)+ containerSize/2,
                                     r : circle.radius/10,
@@ -113,9 +137,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function move(e){ 
       if(allowMove){
-        let y = container.clientWidth/2- e.pageY;
-        let x = e.pageX - container.clientWidth/2;
-
+          let y,x;
+          
+          if(e.type != "touchmove")
+          {
+             y = container.clientWidth/2- e.pageY;
+             x = e.pageX - container.clientWidth/2;
+          }else{
+             y = container.clientWidth/2- e.touches[0].pageY;
+             x = e.touches[0].pageX - container.clientWidth/2;
+          }
         let radian = Math.atan2(y, x);
         let angle = radian*180/Math.PI;
         moveKnob(angle);
