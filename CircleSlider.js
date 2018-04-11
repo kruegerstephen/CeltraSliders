@@ -9,18 +9,19 @@
 document.addEventListener('DOMContentLoaded', function(){ 
 
     var container = document.getElementById('container');
-    var circles = [];
+    const circles = [];
     var radius = 100;
-    var containerCenterW = container.offsetLeft + container.clientWidth/2;
-    var containerCenterH = container.offsetTop + container.clientHeight/2;
+    const containerCenterW =  container.clientWidth/2;
+    const containerCenterH =  container.clientHeight/2;
 
     var containerSize = container.clientWidth;
 
-    var radian = 49*Math.PI/180;
+    var startAngle = 180*Math.PI/180;
 
-    
+    let allowMove = true;
     
 circles.push({
+    id : "circ1",
     container: "",
     color: "blue",
     strokewidth:5,
@@ -37,15 +38,15 @@ circles.push({
 circles.forEach(
     function(circle)
     {
-        drawCircle(circle);
+        drawCircle(circle, startAngle);
     }
 );
 
 
 
-function drawCircle(circle){
+function drawCircle(circle, angle){
     
-    var r = getNode('circle', { id : "circle1",
+    var r = getNode('circle', { id : circle.id,
                                 cx : circle.x,
                                 cy : circle.y,
                                 r  : circle.radius,
@@ -55,8 +56,9 @@ function drawCircle(circle){
                                 });
     
     var x = getNode('circle', { id : "circle1Spinner",
-                                cx : Math.round(Math.sin(radian)*radius) + containerSize/2,
-                                cy : Math.round(Math.cos(radian)*radius)+ containerSize/2,
+                                parentId : circle.id,
+                                cx : Math.round(Math.sin(angle)*radius) + containerSize/2,
+                                cy : Math.round(Math.cos(angle)*radius)+ containerSize/2,
                                 r : circle.radius/10,
                                 fill : "red",
                                 stroke : "none"});
@@ -66,7 +68,7 @@ function drawCircle(circle){
 }
     
     
-function degreesToRadians(degrees){
+function degreesTostartAngles(degrees){
    let rads = (degrees * Math.PI/180);
     return rads;
 }
@@ -79,6 +81,33 @@ function getNode(n, v) {
 }
     
 
+var circ1 = document.getElementById("circle1Spinner");
+circ1.addEventListener('touchstart', start , false);
+circ1.addEventListener('touchmove', move , false);
+circ1.addEventListener('mousedown', start , false);
+circ1.addEventListener('mouseup', end , false);
+circ1.addEventListener('mousemove', move , false);
+
+
+function start(e){
+  allowMove = true;
+}
+
+function move(e){ 
+  if(allowMove){
+    var y = this.parentElement.clientWidth/2- e.pageY;
+    var x = e.pageX - this.parentElement.clientWidth/2;
+    
+    var radian = Math.atan2(y, x);
+    var angle = radian*180/Math.PI;
+    var currentCirc = circles.filter(circ => circ.id == this.getAttribute('parentId'));
+    drawCircle(currentCirc[0], angle);
+  }
+}    
+    
+function end(e){
+  allowMove = true;
+}
     
     
 }, false);
