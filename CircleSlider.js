@@ -14,18 +14,17 @@ document.addEventListener('DOMContentLoaded', function(){
     const containerCenterW =  container.clientWidth/2;
     const containerCenterH =  container.clientHeight/2;
     let containerSize = container.clientWidth;
-    let startAngle = 180*Math.PI/180;
+    let startAngle = 270*Math.PI/180;
     let allowMove = false;
     
 //define circles
 circles.push({
     id : "circ1",
-    container: "",
     color: "green",
     strokewidth:5,
-    maxVal: "",
-    minVal: "",
-    step: 90,
+    maxVal: 100,
+    minVal: 0,
+    step: 20,
     x: 150,
     y: 150,
     radius: 100,
@@ -74,6 +73,14 @@ function getNode(n, v) {
 }
 /*----------------end circle drawing ----------*/
 
+        
+function valueConversion(circ, angle){
+
+    let value = ((angle-180)/360) * circ.maxVal;
+    console.log(Math.abs(value/circ.step)*circ.step);
+
+}
+    
     
 
 /* ---------event handlers------------ */
@@ -88,7 +95,8 @@ container.addEventListener('mousemove', move , false);
     
 function moveKnob(angle){
     let circ = circles.filter(c => c.id == moveThisKnob.getAttribute('pID'))[0];   
-    angle = Math.round(angle/circ.step) * circ.step;
+    angle = Math.round(angle/(360/circ.step)) * (360/circ.step);
+    valueConversion(circ, angle);
     let radian = angle*Math.PI/180;
     let top = -Math.round(Math.sin(radian)*circ.radius) + containerSize/2;
     let left = Math.round(Math.cos(radian)*circ.radius)+ containerSize/2;
@@ -104,13 +112,11 @@ function start(e){
     
 function move(e){ 
   if(allowMove){
-    let y = this.parentElement.clientWidth/2- e.pageY;
-    let x = e.pageX - this.parentElement.clientWidth/2;
+    let y = container.clientWidth/2- e.pageY;
+    let x = e.pageX - container.clientWidth/2;
     
     let radian = Math.atan2(y, x);
     let angle = radian*180/Math.PI;
-    console.log(angle)
-    angle = Math.round(angle/30) * 30;
     moveKnob(angle);
   }
 }    
