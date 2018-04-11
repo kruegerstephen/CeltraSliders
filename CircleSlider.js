@@ -21,11 +21,11 @@ document.addEventListener('DOMContentLoaded', function(){
 circles.push({
     id : "circ1",
     container: "",
-    color: "blue",
+    color: "green",
     strokewidth:5,
     maxVal: "",
     minVal: "",
-    step: "",
+    step: 90,
     x: 150,
     y: 150,
     radius: 100,
@@ -75,8 +75,6 @@ function getNode(n, v) {
 /*----------------end circle drawing ----------*/
 
     
-    
-    
 
 /* ---------event handlers------------ */
 let knob1 = document.getElementById("circle1Spinner");
@@ -89,8 +87,9 @@ container.addEventListener('mouseup', end , false);
 container.addEventListener('mousemove', move , false);
     
 function moveKnob(angle){
+    let circ = circles.filter(c => c.id == moveThisKnob.getAttribute('pID'))[0];   
+    angle = Math.round(angle/circ.step) * circ.step;
     let radian = angle*Math.PI/180;
-    let circ = circles.filter(c => c.id == moveThisKnob.getAttribute('pID'))[0];    
     let top = -Math.round(Math.sin(radian)*circ.radius) + containerSize/2;
     let left = Math.round(Math.cos(radian)*circ.radius)+ containerSize/2;
     moveThisKnob.cx.baseVal.value = left;
@@ -111,6 +110,7 @@ function move(e){
     let radian = Math.atan2(y, x);
     let angle = radian*180/Math.PI;
     console.log(angle)
+    angle = Math.round(angle/30) * 30;
     moveKnob(angle);
   }
 }    
