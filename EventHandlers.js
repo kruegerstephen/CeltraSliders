@@ -7,16 +7,15 @@
 
 
     function move(e){
-              if(allowMove){     
-
-                  let containerCenterW;
-                  let currCircle;
+              if(allowMove){                       
+        
                   
-                  if(this.getAttribute("id") === "container"){
-                      containerCenterW = this.clientWidth/2;
-                      let arrayChildren = Array.from(this.childNodes);
-                      currCircle = arrayChildren.filter((child) => child.id === moveThisKnob.getAttribute("pID"))[0];
-                  }
+                  let containerCenterW = container.clientWidth/2;
+                  let arrayChildren = Array.from(container.childNodes);
+                  let currCircle = arrayChildren.filter((child) => child.id === moveThisKnob.getAttribute("pID"))[0];
+                 
+                  
+
 
 
                   let y,x;

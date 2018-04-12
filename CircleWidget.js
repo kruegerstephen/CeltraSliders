@@ -33,7 +33,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
         let x = getNode("circle", { pID : this.id,
                                     cx : Math.round(Math.sin(startAngle)*this.radius) + this.x,
                                     cy : Math.round(Math.cos(startAngle)*this.radius)+ this.x,
-                                    r : this.radius/10,
+                                    r : this.radius/7,
                                     fill : "silver",
                                     stroke : "none"});
         knobs.push(x);

@@ -1,7 +1,7 @@
 
 function valueConversion(circle, angle){
     
-    let maxVal = circle.attributes.maxVal.value;
+    let maxVal = parseInt(circle.attributes.maxVal.value);
     let step = circle.attributes.step.value;
     
     
@@ -12,6 +12,9 @@ function valueConversion(circle, angle){
     let dispDIV = document.getElementById(circleDisplayID);
     dispDIV.innerHTML = value.toString();
     
+    if(value === maxVal){
+        drawPath(circle, -179);
+    }
     
 }
 

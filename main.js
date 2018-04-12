@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function(){
         color: "blue",
         maxVal: 100,
         minVal: 0,
-        step: 20,
+        step: 100,
         //in future, get from parent of circle
         x: containerCenterW,
         y: containerCenterH,
