@@ -47,12 +47,13 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
 
 
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
-        let knob1 = knobs.filter(kn => kn.getAttribute("pID") == this.id)[0];
-        knob1.addEventListener("touchstart", start , false);
-        knob1.addEventListener("touchmove", move , false);
-        knob1.addEventListener("mousedown", start , false);
+        let knob = knobs.filter(kn => kn.getAttribute("pID") == this.id)[0];
+        knob.addEventListener("touchstart", start , false);
+        knob.addEventListener("touchmove", move , false);
+        knob.addEventListener("mousedown", start , false);
         this.container.addEventListener("mouseup", end , true);
         this.container.addEventListener("mousemove", move, true);
+        this.svgElem.addEventListener("click", move, false);
 };
 
 CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
