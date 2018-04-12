@@ -90,22 +90,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
     }
 
-    function getNode(n, v) {
-      n = document.createElementNS("http://www.w3.org/2000/svg", n);
-      for (var p in v)
-        n.setAttributeNS(null, p, v[p]);
-      return n
-    }
     /*----------------end circle drawing ----------*/
 
 
     function valueConversion(circ, angle){
-
         let value = ((angle+180)/360) * circ.maxVal;
         console.log(circ.maxVal-Math.abs(value/circ.step)*circ.step);
-
     }
-    
     
     
     
@@ -118,16 +109,16 @@ document.addEventListener('DOMContentLoaded', function(){
       };
     }
 
-    function describeArc(x, y, radius, startAngle, endAngle){
+    function generateArc(circle, endAngle){
 
-        var start = findXY(x, y, radius, endAngle);
-        var end = findXY(x, y, radius, startAngle);
+        var end = findXY(circle.x, circle.y, circle.radius, endAngle);
+        var start = findXY(circle.x, circle.y, circle.radius, 0);
 
-        var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+        var largeArcFlag = endAngle - 0 <= 180 ? "0" : "1";
 
         var d = [
-            "M", start.x, start.y, 
-            "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
+            "M", end.x, end.y, 
+            "A", circle.radius, circle.radius, 0, largeArcFlag, 0, start.x, start.y
         ].join(" ");
 
         return d;       
@@ -143,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function(){
                                     fill : "none",
                                     stroke : circle.color,
                                     'stroke-width':circle.strokewidth,
-                                    d:describeArc(circle.x, circle.y, circle.radius, 0, Math.abs(angle-180))});
+                                    d:generateArc(circle, Math.abs(angle-180))});
         
         if(circPath!= undefined ){
            container.replaceChild(x,circPath);
@@ -152,6 +143,15 @@ document.addEventListener('DOMContentLoaded', function(){
         }
         
     }
+    
+    
+    function getNode(n, v) {
+      n = document.createElementNS("http://www.w3.org/2000/svg", n);
+      for (var p in v)
+        n.setAttributeNS(null, p, v[p]);
+      return n
+    }
+    
     
 
     /* ---------event handlers------------ */    
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function(){
         let left = Math.round(Math.cos(radian)*circ.radius)+ containerSize/2;
         moveThisKnob.cx.baseVal.value = left;
         moveThisKnob.cy.baseVal.value = top;
-        drawPath(circ, angle);
+        drawPath(circ, stepAngle);
     }    
 
     function start(e){
