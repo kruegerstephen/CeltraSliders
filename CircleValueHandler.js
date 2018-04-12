@@ -1,7 +1,12 @@
 
-function valueConversion(circ, angle){
-    let value = ((angle+180)/360) * circ.maxVal;
-    console.log(circ.maxVal-Math.abs(value/circ.step)*circ.step);
+function valueConversion(circle, angle){
+    
+    let maxVal = circle.attributes['maxVal'].value;
+    let step = circle.attributes['step'].value;
+
+    
+    let value = ((angle+180)/360) * maxVal;
+    console.log(maxVal-Math.abs(value/step)*step);
 }
 
 //display values

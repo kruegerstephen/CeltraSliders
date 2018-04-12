@@ -21,6 +21,8 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                     cx : this.x,
                                     cy : this.y,
                                     r  : this.radius,
+                                    maxVal : this.maxVal,
+                                    minVal : this.minVal,
                                     step : this.step,
                                     fill : "none",
                                     stroke : "grey",
