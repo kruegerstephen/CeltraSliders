@@ -14,34 +14,34 @@ document.addEventListener('DOMContentLoaded', function(){
     const containerCenterW =  container.clientWidth/2;
     const containerCenterH =  container.clientHeight/2;
     let containerSize = container.clientWidth;
-    let startAngle = 270*Math.PI/180;
+    let startAngle = -90*Math.PI/180;
     let allowMove = false;
     let moveThisKnob;
 
     //define circles
     circles.push({
         id : "circ1",
-        color: "green",
-        maxVal: 100,
-        minVal: 0,
-        step: 20,
-        x: containerCenterW,
-        y: containerCenterH,
-        radius: 100,
-        strokewidth: 2
-    })
-    
-     //define circles
-    circles.push({
-        id : "circ2",
         color: "blue",
         maxVal: 100,
         minVal: 0,
         step: 20,
         x: containerCenterW,
         y: containerCenterH,
-        radius: 125,
-        strokewidth: 2
+        radius: 100,
+        strokewidth: 25
+    })
+    
+     //define circles
+    circles.push({
+        id : "circ2",
+        color: "green",
+        maxVal: 100,
+        minVal: 0,
+        step: 20,
+        x: containerCenterW,
+        y: containerCenterH,
+        radius: 150,
+        strokewidth: 25
     })
     
      circles.push({
@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', function(){
         step: 20,
         x: containerCenterW,
         y: containerCenterH,
-        radius: 150,
-        strokewidth: 2
+        radius: 200,
+        strokewidth: 25
     })
 
 
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function(){
                                     cy : circle.y,
                                     r  : circle.radius,
                                     fill : "none",
-                                    stroke : circle.color,
+                                    stroke : "grey",
                                     'stroke-width': circle.strokewidth
                                     });
 
@@ -101,10 +101,58 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function valueConversion(circ, angle){
 
-        let value = ((angle-180)/360) * circ.maxVal;
-        console.log(Math.abs(value/circ.step)*circ.step);
+        let value = ((angle+180)/360) * circ.maxVal;
+        console.log(circ.maxVal-Math.abs(value/circ.step)*circ.step);
 
     }
+    
+    
+    
+    
+    function findXY(centerX, centerY, radius, angle) {
+      var radians = (angle-180) * Math.PI / 180.0;
+
+      return {
+        x: centerX + (radius * Math.cos(radians)),
+        y: centerY + (radius * Math.sin(radians))
+      };
+    }
+
+    function describeArc(x, y, radius, startAngle, endAngle){
+
+        var start = findXY(x, y, radius, endAngle);
+        var end = findXY(x, y, radius, startAngle);
+
+        var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+        var d = [
+            "M", start.x, start.y, 
+            "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
+        ].join(" ");
+
+        return d;       
+    }
+
+    function drawPath(circle, angle){
+         
+        childArray = Array.from(container.children);
+        circPath = childArray.filter(cNode => cNode.nodeName === 'path');
+        circPath = circPath.filter(path => path.getAttribute('pathID') === circle.id)[0];
+        
+         let x = getNode('path', {  pathID : circle.id,
+                                    fill : "none",
+                                    stroke : circle.color,
+                                    'stroke-width':circle.strokewidth,
+                                    d:describeArc(circle.x, circle.y, circle.radius, 0, Math.abs(angle-180))});
+        
+        if(circPath!= undefined ){
+           container.replaceChild(x,circPath);
+        }else{
+            container.appendChild(x);
+        }
+        
+    }
+    
 
     /* ---------event handlers------------ */    
     function AddEventHandlers(circle){
@@ -120,13 +168,14 @@ document.addEventListener('DOMContentLoaded', function(){
     
     function moveKnob(angle){
         let circ = circles.filter(c => c.id == moveThisKnob.getAttribute('pID'))[0];   
-        angle = Math.round(angle/(360/circ.step)) * (360/circ.step);
-        valueConversion(circ, angle);
-        let radian = angle*Math.PI/180;
+        let stepAngle = Math.round(angle/(360/circ.step)) * (360/circ.step);
+        valueConversion(circ, stepAngle);
+        let radian = stepAngle*Math.PI/180;
         let top = -Math.round(Math.sin(radian)*circ.radius) + containerSize/2;
         let left = Math.round(Math.cos(radian)*circ.radius)+ containerSize/2;
         moveThisKnob.cx.baseVal.value = left;
         moveThisKnob.cy.baseVal.value = top;
+        drawPath(circ, angle);
     }    
 
     function start(e){
@@ -141,15 +190,18 @@ document.addEventListener('DOMContentLoaded', function(){
           
           if(e.type != "touchmove")
           {
-             y = container.clientWidth/2- e.pageY;
-             x = e.pageX - container.clientWidth/2;
+             y = containerCenterW- e.pageY;
+             x = e.pageX - containerCenterW;
           }else{
-             y = container.clientWidth/2- e.touches[0].pageY;
-             x = e.touches[0].pageX - container.clientWidth/2;
+             y = containerCenterW- e.touches[0].pageY;
+             x = e.touches[0].pageX - containerCenterW;
           }
+          
         let radian = Math.atan2(y, x);
         let angle = radian*180/Math.PI;
+        console.log(angle+180)
         moveKnob(angle);
+        
       }
     }    
 
