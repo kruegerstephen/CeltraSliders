@@ -9,10 +9,13 @@
     function move(e){
               if(allowMove){     
 
-                  if(this.getAttribute('id') === 'container'){
+                  let containerCenterW;
+                  let currCircle;
+                  
+                  if(this.getAttribute("id") === "container"){
                       containerCenterW = this.clientWidth/2;
                       let arrayChildren = Array.from(this.childNodes);
-                      currCircle = arrayChildren.filter(child => child.id === moveThisKnob.getAttribute('pID'))[0];
+                      currCircle = arrayChildren.filter((child) => child.id === moveThisKnob.getAttribute("pID"))[0];
                   }
 
 

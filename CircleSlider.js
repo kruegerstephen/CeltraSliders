@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function(){
     
     
     function findXY(centerX, centerY, radius, angle) {
-      var radians = (angle-180) * Math.PI / 180.0;
+      let radians = (angle-180) * Math.PI / 180.0;
 
       return {
         x: centerX + (radius * Math.cos(radians)),
@@ -80,12 +80,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function generateArc(circle, endAngle){
 
-        var end = findXY(circle.x, circle.y, circle.radius, endAngle);
-        var start = findXY(circle.x, circle.y, circle.radius, 0);
+        let end = findXY(circle.x, circle.y, circle.radius, endAngle);
+        let start = findXY(circle.x, circle.y, circle.radius, 0);
 
-        var largeArcFlag = endAngle - 0 <= 180 ? "0" : "1";
+        let largeArcFlag = endAngle - 0 <= 180 ? "0" : "1";
 
-        var d = [
+        let d = [
             "M", end.x, end.y, 
             "A", circle.radius, circle.radius, 0, largeArcFlag, 0, start.x, start.y
         ].join(" ");
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function(){
     
     function getNode(n, v) {
       n = document.createElementNS("http://www.w3.org/2000/svg", n);
-      for (var p in v)
+      for (let p in v)
         n.setAttributeNS(null, p, v[p]);
       return n
     }

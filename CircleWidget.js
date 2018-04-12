@@ -17,7 +17,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
 
         let startAngle = -90*Math.PI/180;
     
-        let r = getNode('circle', { id : this.id,
+        let r = getNode("circle", { id : this.id,
                                     cx : this.x,
                                     cy : this.y,
                                     r  : this.radius,
@@ -26,10 +26,10 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                     step : this.step,
                                     fill : "none",
                                     stroke : "grey",
-                                    'stroke-width': this.strokewidth
+                                    "stroke-width": this.strokewidth
                                     });
 
-        let x = getNode('circle', { pID : this.id,
+        let x = getNode("circle", { pID : this.id,
                                     cx : Math.round(Math.sin(startAngle)*this.radius) + this.x,
                                     cy : Math.round(Math.cos(startAngle)*this.radius)+ this.x,
                                     r : this.radius/10,
@@ -41,22 +41,22 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
         this.container = container;
         this.svgElem = r;
 
-}
+};
 
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
-        let knob1 = knobs.filter(kn => kn.getAttribute('pID') == this.id)[0];
-        knob1.addEventListener('touchstart', start , false);
-        knob1.addEventListener('touchmove', move , false);
-        knob1.addEventListener('mousedown', start , false);
-        this.container.addEventListener('mouseup', end , true);
-        this.container.addEventListener('mousemove', move, true);
-    }
+        let knob1 = knobs.filter(kn => kn.getAttribute("pID") == this.id)[0];
+        knob1.addEventListener("touchstart", start , false);
+        knob1.addEventListener("touchmove", move , false);
+        knob1.addEventListener("mousedown", start , false);
+        this.container.addEventListener("mouseup", end , true);
+        this.container.addEventListener("mousemove", move, true);
+};
 
 
  
 function moveKnob(circ, angle){
     
-    let step = circ.attributes['step'].value;
+    let step = circ.attributes.step.value;
     let radius = circ.r.baseVal.value;
     let centerX = circ.cx.baseVal.value;
     
@@ -74,16 +74,16 @@ function moveKnob(circ, angle){
 
 function drawPath(circle, angle){
          
-    childArray = Array.from(container.children);
-    circPath = childArray.filter(cNode => cNode.nodeName === 'path');
-    circPath = circPath.filter(path => path.getAttribute('pathID') === circle.id)[0];
+    let childArray = Array.from(container.children);
+    let circPath = childArray.filter(cNode => cNode.nodeName === "path");
+        circPath = circPath.filter(path => path.getAttribute("pathID") === circle.id)[0];
 
-     let strokewidth = circle.attributes['stroke-width'].value;
+     let strokewidth = circle.attributes["stroke-width"].value;
 
-     let x = getNode('path', {  pathID : circle.id,
+     let x = getNode("path", {  pathID : circle.id,
                                 fill : "none",
                                 stroke : "black",
-                                'stroke-width':strokewidth,
+                                "stroke-width":strokewidth,
                                 d:generateArc(circle, Math.abs(angle-180))});
 
     if(circPath!= undefined ){
@@ -115,12 +115,12 @@ function generateArc(circle, endAngle){
 
     var largeArcFlag = endAngle - 0 <= 180 ? "0" : "1";
 
-    var d = [
+    return d = [
         "M", end.x, end.y, 
         "A", radius, radius, 0, largeArcFlag, 0, start.x, start.y
     ].join(" ");
 
-    return d;       
+     
 }
 
 
@@ -132,4 +132,4 @@ function getNode(n, v) {
   for (var p in v)
     n.setAttributeNS(null, p, v[p]);
   return n
-}
+};
