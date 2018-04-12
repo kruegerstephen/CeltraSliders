@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded', function(){ 
 
     const container = document.getElementById('container');
-    const knobs = [];
     const containerCenterW =  container.clientWidth/2;
     const containerCenterH =  container.clientHeight/2;
     let containerSize = container.clientWidth;
@@ -42,14 +41,14 @@ document.addEventListener('DOMContentLoaded', function(){
     
     circle1.DrawCircle();
     circle1.AddEventHandlers();
+    circle1.CreateDisplayField();
     
     circle2.DrawCircle();
     circle2.AddEventHandlers();
+    circle2.CreateDisplayField();
     
     
-    
-    
-    
-
 
 }, false);
+
+

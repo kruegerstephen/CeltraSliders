@@ -21,6 +21,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                     cx : this.x,
                                     cy : this.y,
                                     r  : this.radius,
+                                    strokeColor: this.color,
                                     maxVal : this.maxVal,
                                     minVal : this.minVal,
                                     step : this.step,
@@ -33,7 +34,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                     cx : Math.round(Math.sin(startAngle)*this.radius) + this.x,
                                     cy : Math.round(Math.cos(startAngle)*this.radius)+ this.x,
                                     r : this.radius/10,
-                                    fill : "red",
+                                    fill : "silver",
                                     stroke : "none"});
         knobs.push(x);
         container.appendChild(r);
@@ -43,6 +44,8 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
 
 };
 
+
+
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
         let knob1 = knobs.filter(kn => kn.getAttribute("pID") == this.id)[0];
         knob1.addEventListener("touchstart", start , false);
@@ -51,6 +54,15 @@ CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
         this.container.addEventListener("mouseup", end , true);
         this.container.addEventListener("mousemove", move, true);
 };
+
+CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
+       let displayCase = document.getElementById('displayCase');
+       let valueDisplay = document.createElement('div');
+       valueDisplay.id = this.id + "display";
+       displayCase.appendChild(valueDisplay);
+       
+};
+
 
 
  
@@ -69,6 +81,9 @@ function moveKnob(circ, angle){
 
     drawPath(circ, stepAngle);
     valueConversion(circ, stepAngle);
+    
+    //moves knob to bottom of dom, which keeps it on top of all other elements
+    container.appendChild(moveThisKnob);
 }
 
 
@@ -82,7 +97,7 @@ function drawPath(circle, angle){
 
      let x = getNode("path", {  pathID : circle.id,
                                 fill : "none",
-                                stroke : "black",
+                                stroke : circle.attributes.strokeColor.value,
                                 "stroke-width":strokewidth,
                                 d:generateArc(circle, Math.abs(angle-180))});
 
@@ -91,11 +106,13 @@ function drawPath(circle, angle){
     }else{
         container.appendChild(x);
     }
+    
+    
 
 }
 
  function findPathXY(centerX, centerY, radius, angle) {
-      var radians = (angle-180) * Math.PI / 180.0;
+      let radians = (angle-180) * Math.PI / 180.0;
 
       return {
         x: centerX + (radius * Math.cos(radians)),
@@ -110,10 +127,10 @@ function generateArc(circle, endAngle){
     let centerY = circle.cx.baseVal.value;
 
 
-    var start = findPathXY(centerX, centerY, radius, 0);
-    var end = findPathXY(centerX, centerY, radius, endAngle);
+    let start = findPathXY(centerX, centerY, radius, 0);
+    let end = findPathXY(centerX, centerY, radius, endAngle);
 
-    var largeArcFlag = endAngle - 0 <= 180 ? "0" : "1";
+    let largeArcFlag = endAngle - 0 <= 180 ? "0" : "1";
 
     return d = [
         "M", end.x, end.y, 
@@ -124,12 +141,9 @@ function generateArc(circle, endAngle){
 }
 
 
-
-
-
 function getNode(n, v) {
   n = document.createElementNS("http://www.w3.org/2000/svg", n);
-  for (var p in v)
+  for (let p in v)
     n.setAttributeNS(null, p, v[p]);
   return n
 };
