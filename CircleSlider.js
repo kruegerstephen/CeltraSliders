@@ -31,32 +31,6 @@ document.addEventListener('DOMContentLoaded', function(){
         strokewidth: 25
     })
     
-     //define circles
-    circles.push({
-        id : "circ2",
-        color: "green",
-        maxVal: 100,
-        minVal: 0,
-        step: 20,
-        x: containerCenterW,
-        y: containerCenterH,
-        radius: 150,
-        strokewidth: 25
-    })
-    
-     circles.push({
-        id : "circ3",
-        color: "red",
-        maxVal: 100,
-        minVal: 0,
-        step: 20,
-        x: containerCenterW,
-        y: containerCenterH,
-        radius: 200,
-        strokewidth: 25
-    })
-
-
     circles.forEach(
         function(circle)
         {
@@ -93,11 +67,6 @@ document.addEventListener('DOMContentLoaded', function(){
     /*----------------end circle drawing ----------*/
 
 
-    function valueConversion(circ, angle){
-        let value = ((angle+180)/360) * circ.maxVal;
-        console.log(circ.maxVal-Math.abs(value/circ.step)*circ.step);
-    }
-    
     
     
     function findXY(centerX, centerY, radius, angle) {
