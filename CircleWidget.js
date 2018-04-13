@@ -70,6 +70,7 @@ CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
         let knob = getAllKnobs.call().filter(kn => kn.getAttribute("pID") == this.id)[0];
         knob.addEventListener("touchstart", start , false);
         knob.addEventListener("touchmove", move , false);
+        knob.addEventListener("touchend", end , false);
         knob.addEventListener("mousedown", start , false);
         this.container.addEventListener("mouseup", end , true);
         this.container.addEventListener("mousemove", move, true);
@@ -77,10 +78,10 @@ CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
 };
 
 CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
-       var body = document.getElementsByTagName("body")[0];
-       let displayCase = document.createElement('div');
-       displayCase.id = "displayCase";
-       body.appendChild(displayCase);
+       //var body = document.getElementsByTagName("body")[0];
+       //let displayCase = document.createElement('div');
+       //displayCase.id = "displayCase";
+       //body.appendChild(displayCase);
        let valueDisplay = document.createElement('div');
        valueDisplay.id = this.id + "display";
        displayCase.appendChild(valueDisplay);
@@ -175,28 +176,5 @@ function generateArc(circle, endAngle){
     ].join(" ");
 }
 
-function resizeSVG(circle, startAngle){
-
-            container.width.baseVal.value = circle.radius*2.5;
-            container.height.baseVal.value = circle.radius*2.5;
-            
-            let centerContainer = container.width.baseVal.value/2;
-            
-            let allCircles = getAllCircles();
-            
-            for(let circle of allCircles){
-                
-                let slider = getSliderPartsByID(circle.id);
-                
-                slider.sCircle.cx.baseVal.value = centerContainer;
-                slider.sCircle.cy.baseVal.value = centerContainer;
-                
-                let knobPositions = getKnobPosition(startAngle, slider.sCircle.r.baseVal.value, centerContainer);
-                
-                slider.sKnob.cx.baseVal.value = knobPositions.knobX;
-                slider.sKnob.cy.baseVal.value = knobPositions.knobY;
-                
-            }
-}
 
 

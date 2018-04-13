@@ -17,14 +17,14 @@
 
                   if(e.type == "mousemove")
                   {
-                     y = containerCenterW- e.pageY;
-                     x = e.pageX - containerCenterW; 
+                     y = containerCenterW- e.offsetY;
+                     x = e.offsetX - containerCenterW; 
                      sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
   
                   }else if(e.type == "click"){
                       allowMove = false;
-                      y = containerCenterW- e.pageY;
-                      x = e.pageX - containerCenterW;
+                      y = containerCenterW- e.offsetY;
+                      x = e.offsetX - containerCenterW;
                       if(this.attributes.pathID!=undefined){
                         sliderCircle = getSliderPartsByID(this.attributes.pathID.value);
                       }else{

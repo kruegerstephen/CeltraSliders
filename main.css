@@ -1,0 +1,30 @@
+.grid{
+    display: grid;
+    grid-template-areas:
+        " pagetitle pagetitle "
+        " . spinners "
+        " . values";
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-row-gap: 100px;
+    
+}
+
+#spinners{
+    grid-area: spinners;
+}
+
+#displayCase{
+    grid-area: values;
+    text-align: center;
+    align-self: center;
+    font-size: 40px;
+    display: grid;
+    grid-gap: 15px; 
+}
+
+#pageTitle{
+    grid-area: pagetitle;
+    text-align: center;
+    font-size: 40px;
+}

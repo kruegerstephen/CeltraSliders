@@ -1,10 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', function(){ 
 
-    let startAngle = -90*Math.PI/180;
-    let moveThisKnob;
-    
-    
     const container = createSVG();
     document.getElementById('spinners').appendChild(container);
     
@@ -16,10 +12,7 @@ document.addEventListener('DOMContentLoaded', function(){
         radius: 100,
         strokewidth: 25
     };    
-    
-    
 
-        
     let options2 =  {
         color: "blue",
         maxVal: 300,
@@ -48,21 +41,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 
-
-
 function createSVG(){
     return svg = getNode("svg", {
-                        id:"container",
-                        width:100,
-                        height:100
-                      })
+                                    id:"container",
+                                    width:100,
+                                    height:100
+                                })
     
 }
 
 
-function getNode(n, v) {
-  n = document.createElementNS("http://www.w3.org/2000/svg", n);
-  for (let p in v)
-    n.setAttributeNS(null, p, v[p]);
-  return n
-};

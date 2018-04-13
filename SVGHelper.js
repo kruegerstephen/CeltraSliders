@@ -1,11 +1,3 @@
-function getNode(n, v) {
-  n = document.createElementNS("http://www.w3.org/2000/svg", n);
-  for (let p in v)
-    n.setAttributeNS(null, p, v[p]);
-  return n
-};
-
-
 function getAllSVGElements(){
      return Array.from(container.childNodes);
 };
@@ -35,5 +27,36 @@ function getSliderPartsByID(id){
         sCircle: sliderCircle,
         sKnob: sliderKnob,
         sPath: sliderPath
+    }
+}
+
+function getNode(n, v) {
+  n = document.createElementNS("http://www.w3.org/2000/svg", n);
+  for (let p in v)
+    n.setAttributeNS(null, p, v[p]);
+  return n
+};
+
+function resizeSVG(circle, startAngle){
+
+    container.width.baseVal.value = circle.radius*2.5;
+    container.height.baseVal.value = circle.radius*2.5;
+
+    let centerContainer = container.width.baseVal.value/2;
+
+    let allCircles = getAllCircles();
+
+    for(let circle of allCircles){
+
+        let slider = getSliderPartsByID(circle.id);
+
+        slider.sCircle.cx.baseVal.value = centerContainer;
+        slider.sCircle.cy.baseVal.value = centerContainer;
+
+        let knobPositions = getKnobPosition(startAngle, slider.sCircle.r.baseVal.value, centerContainer);
+
+        slider.sKnob.cx.baseVal.value = knobPositions.knobX;
+        slider.sKnob.cy.baseVal.value = knobPositions.knobY;
+
     }
 }
