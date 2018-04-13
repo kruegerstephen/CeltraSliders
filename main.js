@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function(){
     };    
     
     
-    let circle1 = new CircleWidget(options);
 
         
     let options2 =  {
@@ -30,24 +29,25 @@ document.addEventListener('DOMContentLoaded', function(){
         strokewidth: 25
     };    
     
+    let options3 =  {
+        color: "blue",
+        maxVal: 300,
+        minVal: 50,
+        step: 5,      
+        radius: 300,
+        strokewidth: 25
+    };    
     
-    let circle2 = new CircleWidget(options2);
     
-    circle1.DrawCircle();
-    circle1.AddEventHandlers();
-    circle1.CreateDisplayField();
-    
-    circle2.DrawCircle();
-    circle2.AddEventHandlers();
-    circle2.CreateDisplayField();
-    
-
-
-
-
-    
+    CreateCircle(options);
+    CreateCircle(options2);
+    CreateCircle(options3);
 
 }, false);
+
+
+
+
 
 
 function createSVG(){

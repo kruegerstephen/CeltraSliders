@@ -10,6 +10,16 @@ function CircleWidget(options){
         this.strokewidth= 25;
 }
 
+
+function CreateCircle(options){
+    
+    let circle = new CircleWidget(options);
+    circle.DrawCircle();
+    circle.AddEventHandlers();
+    circle.CreateDisplayField();    
+}
+
+
 CircleWidget.prototype.DrawCircle = function drawCircle(){
 
     
@@ -67,7 +77,10 @@ CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
 };
 
 CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
-       let displayCase = document.getElementById('displayCase');
+       var body = document.getElementsByTagName("body")[0];
+       let displayCase = document.createElement('div');
+       displayCase.id = "displayCase";
+       body.appendChild(displayCase);
        let valueDisplay = document.createElement('div');
        valueDisplay.id = this.id + "display";
        displayCase.appendChild(valueDisplay);
