@@ -22,10 +22,11 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
     
        let centerContainer = container.clientWidth/2;
 
+       let circleID = "circ" + getAllCircles().length.toString(); 
+       this.id = circleID;
     
     
-    
-        let r = getNode("circle", { id : this.id,
+        let r = getNode("circle", { id : circleID,
                                     cx : centerContainer,
                                     cy : centerContainer,
                                     r  : this.radius,
@@ -40,7 +41,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
 
         let knobXY = getKnobPosition(startAngle, this.radius, centerContainer);
     
-        let x = getNode("circle", { pID : this.id,
+        let x = getNode("circle", { pID : circleID,
                                     cx : knobXY.knobX,
                                     cy : knobXY.knobY,
                                     r : this.radius/7,

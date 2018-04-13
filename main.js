@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('spinners').appendChild(container);
     
     let options =  {
-        id : "circ1",
         color: "blue",
         maxVal: 5000,
         minVal: 10,
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         
     let options2 =  {
-        id : "circ2",
         color: "blue",
         maxVal: 300,
         minVal: 50,
