@@ -15,11 +15,19 @@ function CircleWidget(options){
 
 CircleWidget.prototype.DrawCircle = function drawCircle(){
 
+    
+        let centerContainer = container.clientWidth/2;
+        if(container.clientWidth < this.radius+100 || container.clientHeight<this.radius+100){
+            container.clientWidth = this.radius+100;                       container.clientHeight = this.radius+100; 
+
+        }
+    
+    
         let startAngle = -90*Math.PI/180;
     
         let r = getNode("circle", { id : this.id,
-                                    cx : this.x,
-                                    cy : this.y,
+                                    cx : centerContainer,
+                                    cy : centerContainer,
                                     r  : this.radius,
                                     strokeColor: this.color,
                                     maxVal : this.maxVal,
@@ -31,8 +39,8 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                     });
 
         let x = getNode("circle", { pID : this.id,
-                                    cx : Math.round(Math.sin(startAngle)*this.radius) + this.x,
-                                    cy : Math.round(Math.cos(startAngle)*this.radius)+ this.x,
+                                    cx : Math.round(Math.sin(startAngle)*this.radius) + centerContainer,
+                                    cy : Math.round(Math.cos(startAngle)*this.radius)+ centerContainer,
                                     r : this.radius/7,
                                     fill : "silver",
                                     stroke : "none"});
