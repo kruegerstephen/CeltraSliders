@@ -1,6 +1,3 @@
-const knobs = [];
-
-
 function CircleWidget(options){
         this.id = options.id,
         this.color = options.color,
@@ -16,14 +13,17 @@ function CircleWidget(options){
 CircleWidget.prototype.DrawCircle = function drawCircle(){
 
     
-        let centerContainer = container.clientWidth/2;
-        if(container.clientWidth < this.radius+100 || container.clientHeight<this.radius+100){
-            container.clientWidth = this.radius+100;                       container.clientHeight = this.radius+100; 
+        let startAngle = -90*Math.PI/180;
 
+    
+        if(container.width.baseVal.value < this.radius*2.5 || container.height.baseVal.value<this.radius*2.5){
+          resizeSVG(this, startAngle);
         }
     
+       let centerContainer = container.clientWidth/2;
+
     
-        let startAngle = -90*Math.PI/180;
+    
     
         let r = getNode("circle", { id : this.id,
                                     cx : centerContainer,
@@ -38,13 +38,14 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                     "stroke-width": this.strokewidth
                                     });
 
+        let knobXY = getKnobPosition(startAngle, this.radius, centerContainer);
+    
         let x = getNode("circle", { pID : this.id,
-                                    cx : Math.round(Math.sin(startAngle)*this.radius) + centerContainer,
-                                    cy : Math.round(Math.cos(startAngle)*this.radius)+ centerContainer,
+                                    cx : knobXY.knobX,
+                                    cy : knobXY.knobY,
                                     r : this.radius/7,
                                     fill : "silver",
                                     stroke : "none"});
-        knobs.push(x);
         container.appendChild(r);
         container.appendChild(x);
         this.container = container;
@@ -55,7 +56,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
 
 
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
-        let knob = knobs.filter(kn => kn.getAttribute("pID") == this.id)[0];
+        let knob = getAllKnobs.call().filter(kn => kn.getAttribute("pID") == this.id)[0];
         knob.addEventListener("touchstart", start , false);
         knob.addEventListener("touchmove", move , false);
         knob.addEventListener("mousedown", start , false);
@@ -125,6 +126,15 @@ function drawPath(fullSlider, angle){
     }
 }
 
+
+function getKnobPosition(angle, radius, centerContainer){
+    return{
+        knobX: Math.round(Math.sin(angle)*radius) + centerContainer,
+        knobY: Math.round(Math.cos(angle)*radius)+ centerContainer
+    }
+    
+}
+
  function findPathXY(centerX, centerY, radius, angle) {
       let radians = (angle-180) * Math.PI / 180.0;
 
@@ -149,8 +159,30 @@ function generateArc(circle, endAngle){
         "M", end.x, end.y, 
         "A", radius, radius, 0, largeArcFlag, 0, start.x, start.y
     ].join(" ");
+}
 
-     
+function resizeSVG(circle, startAngle){
+
+            container.width.baseVal.value = circle.radius*2.5;
+            container.height.baseVal.value = circle.radius*2.5;
+            
+            let centerContainer = container.width.baseVal.value/2;
+            
+            let allCircles = getAllCircles();
+            
+            for(let circle of allCircles){
+                
+                let slider = getSliderPartsByID(circle.id);
+                
+                slider.sCircle.cx.baseVal.value = centerContainer;
+                slider.sCircle.cy.baseVal.value = centerContainer;
+                
+                let knobPositions = getKnobPosition(startAngle, slider.sCircle.r.baseVal.value, centerContainer);
+                
+                slider.sKnob.cx.baseVal.value = knobPositions.knobX;
+                slider.sKnob.cy.baseVal.value = knobPositions.knobY;
+                
+            }
 }
 
 

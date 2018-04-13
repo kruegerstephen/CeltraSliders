@@ -8,10 +8,6 @@ document.addEventListener('DOMContentLoaded', function(){
     const container = createSVG();
     document.getElementById('spinners').appendChild(container);
     
-    const containerCenterW =  container.clientWidth/2;
-    const containerCenterH =  container.clientHeight/2;
-    let containerSize = container.clientWidth;
-
     let options =  {
         id : "circ1",
         color: "blue",
@@ -20,44 +16,35 @@ document.addEventListener('DOMContentLoaded', function(){
         step: 50,      
         radius: 100,
         strokewidth: 25
-    };
-    
-     let options2 =  {
-        id : "circ2",
-        color: "yellow",
-        maxVal: 100,
-        minVal: 0,
-        step: 5,
-        //in future, get from parent of circle
-        x: containerCenterW,
-        y: containerCenterH,
-        radius: 150,
-        strokewidth: 25
-    };
-    
-    let options3 =  {
-        id : "circ3",
-        color: "green",
-        maxVal: 100,
-        minVal: 0,
-        step: 5,
-        //in future, get from parent of circle
-        x: containerCenterW,
-        y: containerCenterH,
-        radius: 190,
-        strokewidth: 25
-    };
-    
-    
+    };    
     
     
     let circle1 = new CircleWidget(options);
 
-
+        
+    let options2 =  {
+        id : "circ2",
+        color: "blue",
+        maxVal: 300,
+        minVal: 50,
+        step: 5,      
+        radius: 200,
+        strokewidth: 25
+    };    
+    
+    
+    let circle2 = new CircleWidget(options2);
     
     circle1.DrawCircle();
     circle1.AddEventHandlers();
     circle1.CreateDisplayField();
+    
+    circle2.DrawCircle();
+    circle2.AddEventHandlers();
+    circle2.CreateDisplayField();
+    
+
+
 
 
     
@@ -68,8 +55,8 @@ document.addEventListener('DOMContentLoaded', function(){
 function createSVG(){
     return svg = getNode("svg", {
                         id:"container",
-                        width:500,
-                        height:500,
+                        width:100,
+                        height:100
                       })
     
 }

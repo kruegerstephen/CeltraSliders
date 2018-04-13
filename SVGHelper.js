@@ -11,11 +11,11 @@ function getAllSVGElements(){
 };
 
 function getAllCircles(){
-        return getAllSVGElements.call().filter(child => child.nodeName =="circle");
+        return getAllSVGElements.call().filter(child => child.nodeName =="circle" && child.attributes.pID == undefined);
 };
 
 function getAllKnobs(){
-        return getAllCircles.call().filter(child => child.attributes.pID != undefined);
+        return getAllSVGElements.call().filter(child => child.attributes.pID != undefined);
 };
 
 function getAllPaths(){
