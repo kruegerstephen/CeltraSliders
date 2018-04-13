@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function(){
     let options =  {
         id : "circ1",
         color: "blue",
-        maxVal: 400,
-        minVal: 100,
-        step: 10,
+        maxVal: 5000,
+        minVal: 10,
+        step: 50,
         //in future, get from parent of circle
         x: containerCenterW,
         y: containerCenterH,
