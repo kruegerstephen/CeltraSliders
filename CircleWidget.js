@@ -67,33 +67,37 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
 
 
  
-function moveKnob(circ, angle){
+function moveKnob(fullSlider, angle){
     
-    let step = circ.attributes.step.value;
-    let radius = circ.r.baseVal.value;
-    let centerX = circ.cx.baseVal.value;
+    let circle = fullSlider.sCircle;
+    let step = circle.attributes.step.value;
+    let radius = circle.r.baseVal.value;
+    let centerX = circle.cx.baseVal.value;
     
-    let stepAngle = Math.round(angle/(360/step)) * (360/step);
+    let stepAngle = Math.round(angle/(360/step)) * (360/step);    
     let radian = stepAngle*Math.PI/180;
-    let top = -Math.round(Math.sin(radian)*radius) + centerX;
-    let left = Math.round(Math.cos(radian)*radius)+ centerX;
-    moveThisKnob.cx.baseVal.value = left;
-    moveThisKnob.cy.baseVal.value = top;
+    
+    let newY = -Math.round(Math.sin(radian)*radius) + centerX;
+    let newX = Math.round(Math.cos(radian)*radius)+ centerX;
+    
+    fullSlider.sKnob.cx.baseVal.value = newX;
+    fullSlider.sKnob.cy.baseVal.value = newY;
 
-    drawPath(circ, stepAngle);
-    valueConversion(circ, stepAngle);
+    drawPath(fullSlider, stepAngle);
+    valueConversion(fullSlider, stepAngle);
     
     //moves knob to bottom of dom, which keeps it on top of all other elements
-    container.appendChild(moveThisKnob);
+    container.appendChild(fullSlider.sKnob);
 }
 
 
-function drawPath(circle, angle){
+function drawPath(fullSlider, angle){
          
-    let childArray = Array.from(container.children);
-    let circPath = childArray.filter(cNode => cNode.nodeName === "path");
-        circPath = circPath.filter(path => path.getAttribute("pathID") === circle.id)[0];
-
+     let circPath = getAllPaths().filter(child => child.attributes.pathID.value == fullSlider.sCircle.id)[0]; 
+     let circle = fullSlider.sCircle; 
+    
+    
+    
      let strokewidth = circle.attributes["stroke-width"].value;
 
      let x = getNode("path", {  pathID : circle.id,
@@ -102,14 +106,15 @@ function drawPath(circle, angle){
                                 "stroke-width":strokewidth,
                                 d:generateArc(circle, Math.abs(angle-180))});
 
-    if(circPath!= undefined ){
-       container.replaceChild(x,circPath);
+    
+    x.addEventListener("click", move, false);
+
+    
+    if(circPath != undefined ){
+        container.replaceChild(x,circPath);
     }else{
         container.appendChild(x);
     }
-    
-    
-
 }
 
  function findPathXY(centerX, centerY, radius, angle) {
@@ -127,7 +132,6 @@ function generateArc(circle, endAngle){
     let centerX = circle.cx.baseVal.value;
     let centerY = circle.cx.baseVal.value;
 
-
     let start = findPathXY(centerX, centerY, radius, 0);
     let end = findPathXY(centerX, centerY, radius, endAngle);
 
@@ -142,9 +146,3 @@ function generateArc(circle, endAngle){
 }
 
 
-function getNode(n, v) {
-  n = document.createElementNS("http://www.w3.org/2000/svg", n);
-  for (let p in v)
-    n.setAttributeNS(null, p, v[p]);
-  return n
-};

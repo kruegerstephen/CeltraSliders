@@ -52,3 +52,9 @@ document.addEventListener('DOMContentLoaded', function(){
 }, false);
 
 
+function getNode(n, v) {
+  n = document.createElementNS("http://www.w3.org/2000/svg", n);
+  for (let p in v)
+    n.setAttributeNS(null, p, v[p]);
+  return n
+};
