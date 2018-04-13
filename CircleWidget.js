@@ -70,7 +70,7 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
 function moveKnob(fullSlider, angle){
     
     let circle = fullSlider.sCircle;
-    let step = circle.attributes.step.value;
+    let step = circle.attributes.maxVal.value/circle.attributes.step.value;
     let radius = circle.r.baseVal.value;
     let centerX = circle.cx.baseVal.value;
     
