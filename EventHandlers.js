@@ -24,7 +24,7 @@
                       allowMove = false;
                       y = containerCenterW- e.offsetY;
                       x = e.offsetX - containerCenterW;
-                      if(this.attributes.pathID!=undefined){
+                      if(this.nodeName === "path"){
                         sliderCircle = getSliderPartsByID(this.attributes.pathID.value);
                       }else{
                         sliderCircle = getSliderPartsByID(this.id);

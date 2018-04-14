@@ -37,7 +37,7 @@ function createSvgElement(n, v) {
   return n
 };
 
-function resizeSVG(circle, startAngle){
+function resizeSVG(circle){
 
     container.width.baseVal.value = circle.radius*2.5;
     container.height.baseVal.value = circle.radius*2.5;
@@ -53,7 +53,7 @@ function resizeSVG(circle, startAngle){
         slider.sCircle.cx.baseVal.value = centerContainer;
         slider.sCircle.cy.baseVal.value = centerContainer;
 
-        let knobPositions = getKnobPosition(startAngle, slider.sCircle.r.baseVal.value, centerContainer);
+        let knobPositions = getKnobPosition(slider.sCircle.attributes.startAngle.value, slider.sCircle.r.baseVal.value, centerContainer);
 
         slider.sKnob.cx.baseVal.value = knobPositions.knobX;
         slider.sKnob.cy.baseVal.value = knobPositions.knobY;

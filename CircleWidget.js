@@ -1,3 +1,19 @@
+
+function CreateCircle(options){
+    
+    let circle = new CircleWidget(options);
+    circle.DrawCircle();
+    circle.CreateKnob();
+    circle.AddEventHandlers();
+    circle.CreateDisplayField();  
+    
+    //Resize the SVG if the circle will be out of the viewbox
+    if(container.clientWidth < circle.radius*2.5 || container.clientHeight< circle.radius*2.5){
+       resizeSVG(circle);
+    }
+}
+
+
 function CircleWidget(options){
     
         let defaultFlag = false;
@@ -5,84 +21,69 @@ function CircleWidget(options){
             defaultFlag = true;
         }
     
-        this.color  = defaultFlag ? options.color  :  "blue",
-        this.maxVal = defaultFlag ? options.maxVal : 100,
-        this.minVal = defaultFlag ? options.minVal : 0,
-        this.step   = defaultFlag ? options.step   : 1,
-        this.radius = defaultFlag ? options.radius : circleRadiusSpacer(),
-        this.strokewidth = defaultFlag ? options.strokewidth : 30;
+        this.color  = defaultFlag ? "blue"  : options.color;
+        this.maxVal = defaultFlag ? 100     : options.maxVal;
+        this.minVal = defaultFlag ? 0       : options.minVal;
+        this.step   = defaultFlag ? 1       : options.step;
+        this.strokewidth = defaultFlag ? 30 : options.strokewidth;
+        this.radius = defaultFlag ? circleRadiusSpacer() : options.radius;
+
+        this.id = "circ" + getAllCircles().length.toString(); 
+        this.startAngle = -90*Math.PI/180;
+        this.cx = container.clientWidth/2;
+        this.cy = container.clientWidth/2;
+
 }
-
-
-function CreateCircle(options){
-    
-    let circle = new CircleWidget(options);
-    circle.DrawCircle();
-    circle.AddEventHandlers();
-    circle.CreateDisplayField();    
-}
-
 
 CircleWidget.prototype.DrawCircle = function drawCircle(){
 
-    
-        let startAngle = -90*Math.PI/180;
 
-        //Resize the SVG if the circle will be out of the viewbox
-        if(container.width.baseVal.value < this.radius*2.5 || container.height.baseVal.value<this.radius*2.5){
-          resizeSVG(this, startAngle);
-        }
-    
-       let centerContainer = container.clientWidth/2;
-
-       let circleID = "circ" + getAllCircles().length.toString(); 
-       this.id = circleID;
-    
-    
-        let circleSlider = createSvgElement("circle", { id : circleID,
-                                    cx : centerContainer,
-                                    cy : centerContainer,
-                                    r  : this.radius,
-                                    strokeColor: this.color,
-                                    maxVal : this.maxVal,
-                                    minVal : this.minVal,
-                                    step : this.step,
-                                    fill : "none",
-                                    stroke : "grey",
-                                    "stroke-opacity" : .4,
-                                    "stroke-width": this.strokewidth
-                                    });
-
-    
-        let knob = this.CreateKnob();
-        
-        container.appendChild(circleSlider);
-        container.appendChild(knob);
-        this.container = container;
-        this.svgElem = r;
-
+       this.slider = createSvgElement("circle", {   id : this.id,
+                                                    cx : this.cx,
+                                                    cy : this.cy,
+                                                    r  : this.radius,
+                                                    strokeColor: this.color,
+                                                    maxVal : this.maxVal,
+                                                    minVal : this.minVal,
+                                                    step : this.step,
+                                                    fill : "none",
+                                                    stroke : "grey",
+                                                    startAngle : this.startAngle,
+                                                    "stroke-opacity" : .4,
+                                                    "stroke-width": this.strokewidth
+                                                    });
+       
+        container.appendChild(this.slider);
+     
 };
 
-
+CircleWidget.prototype.CreateKnob = function CreateKnob(){
+    
+    let knobXY = getKnobPosition(this.startAngle, this.radius, this.cx);
+    
+    this.knob = createSvgElement("circle", {   pID  : this.id,
+                                               cx   : knobXY.knobX,
+                                               cy   : knobXY.knobY,
+                                               r    : this.strokewidth-10,
+                                               fill : "#EDEEEE",
+                                               stroke : "none"});
+    
+    container.appendChild(this.knob);
+}
 
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
         
-        let knob = getAllKnobs.call().filter(kn => kn.getAttribute("pID") == this.id)[0];
-       
-        //
-        knob.addEventListener("touchstart", start , false);
-        knob.addEventListener("touchmove", move , false);
-        knob.addEventListener("touchend", end , false);
-        
-        knob.addEventListener("mousedown", start , false);
+             
+        container.addEventListener("mouseup", end , false);
+        container.addEventListener("mousemove", move, false);
     
-        this.container.addEventListener("mouseup", end , true);
-        this.container.addEventListener("mousemove", move, true);
-        this.container.addEventListener("mouseup", end , true);
-        this.container.addEventListener("mousemove", move, true);
-        
-        this.svgElem.addEventListener("click", move, false);
-        this.svgElem.addEventListener("touchenter", move, false);
+        this.slider.addEventListener("click", move, false);
+        this.slider.addEventListener("touchenter", move, false);   
+    
+        this.knob.addEventListener("touchstart", start , false);
+        this.knob.addEventListener("touchmove", move , false);
+        this.knob.addEventListener("touchend", end , false);
+        this.knob.addEventListener("mousedown", start , false);
 
 };
 
@@ -97,18 +98,6 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
        
 };
 
-
-CircleWidget.prototype.CreateKnob = function CreateKnob(){
-    
-    let knobXY = getKnobPosition(startAngle, this.radius, centerContainer);
-    
-    return createSvgElement("circle", { pID  : circleID,
-                                        cx   : knobXY.knobX,
-                                        cy   : knobXY.knobY,
-                                        r    : this.strokewidth-10,
-                                        fill : "#EDEEEE",
-                                        stroke : "none"});
-}
 
 
  
@@ -138,14 +127,12 @@ function moveKnob(fullSlider, angle){
 
 function drawPath(fullSlider, angle){
          
-     let circPath = getAllPaths().filter(child => child.attributes.pathID.value == fullSlider.sCircle.id)[0]; 
-     let circle = fullSlider.sCircle; 
-    
-    
+     let currPath = getAllPaths().filter(child => child.attributes.pathID.value == fullSlider.sCircle.id)[0]; 
+     let circle = fullSlider.sCircle;  
     
      let strokewidth = circle.attributes["stroke-width"].value;
 
-     let x = createSvgElement("path", {  pathID : circle.id,
+     let path = createSvgElement("path", {  pathID : circle.id,
                                 fill : "none",
                                 stroke : circle.attributes.strokeColor.value,
                                 "stroke-opacity" : .8,
@@ -153,16 +140,15 @@ function drawPath(fullSlider, angle){
                                 d:generateArc(circle, Math.abs(angle-180))});
 
     
-    x.addEventListener("click", move, false);
+    path.addEventListener("click", move, false);
 
     
-    if(circPath != undefined ){
-        container.replaceChild(x,circPath);
+    if(currPath != undefined ){
+        container.replaceChild(path, currPath);
     }else{
-        container.appendChild(x);
+        container.appendChild(path);
     }
 }
-
 
 function getKnobPosition(angle, radius, centerContainer){
     return{

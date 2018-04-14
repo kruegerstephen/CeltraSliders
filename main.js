@@ -61,11 +61,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 function createSVG(){
-    return svg = getNode("svg", {
-                                    id:"container",
-                                    width:100,
-                                    height:100
-                                })
+    return createSvgElement("svg", {
+                            id:"container",
+                            width:300,
+                            height:300
+                          })
     
 }
 
