@@ -146,6 +146,7 @@ function drawPath(fullSlider, angle){
     if(currPath != undefined ){
         container.replaceChild(path, currPath);
     }else{
+        circle.firstMove = true;
         container.appendChild(path);
     }
 }
@@ -160,7 +161,6 @@ function getKnobPosition(angle, radius, centerContainer){
 
  function findPathXY(centerX, centerY, radius, angle) {
       let radians = (angle-180) * Math.PI / 180.0;
-
       return {
         x: centerX + (radius * Math.cos(radians)),
         y: centerY + (radius * Math.sin(radians))

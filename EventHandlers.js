@@ -7,6 +7,7 @@
 
  
     function move(e){
+        e.preventDefault();
               if(allowMove || e.type == "click"){                       
 
                   let containerCenterW = container.clientWidth/2;
@@ -33,7 +34,7 @@
                   }
                   else if(e.type == "touchmove"){
                      y = containerCenterW - e.touches[0].pageY + 50;
-                     x = e.touches[0].pageX - window.innerWidth + containerCenterW;
+                     x = e.touches[0].pageX - window.innerWidth + container.clientWidth;
                      sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
                      console.log(x,y)
   
@@ -49,4 +50,5 @@
 
     function end(e){
       allowMove = false;
+    
     }
