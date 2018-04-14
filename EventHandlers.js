@@ -18,6 +18,7 @@
                   {
                      y = containerCenterW- e.offsetY;
                      x = e.offsetX - containerCenterW; 
+                     console.log(x,y);
                      sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
   
                   }else if(e.type == "click"){
@@ -31,9 +32,10 @@
                       }
                   }
                   else if(e.type == "touchmove"){
-                     y = containerCenterW- e.touches[0].pageY + 50;
-                     x = e.touches[0].pageX - containerCenterW + 50;
+                     y = containerCenterW - e.touches[0].pageY + 50;
+                     x = e.touches[0].pageX - window.innerWidth + containerCenterW;
                      sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
+                     console.log(x,y)
   
                   }
 

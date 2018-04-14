@@ -74,16 +74,16 @@ CircleWidget.prototype.CreateKnob = function CreateKnob(){
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
         
              
-        container.addEventListener("mouseup", end , false);
-        container.addEventListener("mousemove", move, false);
+        container.addEventListener("mouseup", end);
+        container.addEventListener("mousemove", move);
     
-        this.slider.addEventListener("click", move, false);
-        this.slider.addEventListener("touchenter", move, false);   
+        this.slider.addEventListener("click", move);
+        this.slider.addEventListener("touchenter", move);   
     
-        this.knob.addEventListener("touchstart", start , false);
-        this.knob.addEventListener("touchmove", move , false);
-        this.knob.addEventListener("touchend", end , false);
-        this.knob.addEventListener("mousedown", start , false);
+        this.knob.addEventListener("touchstart", start);
+        this.knob.addEventListener("touchmove", move);
+        this.knob.addEventListener("touchend", end);
+        this.knob.addEventListener("mousedown", start);
 
 };
 
