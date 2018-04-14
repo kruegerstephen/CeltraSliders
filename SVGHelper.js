@@ -30,7 +30,7 @@ function getSliderPartsByID(id){
     }
 }
 
-function getNode(n, v) {
+function createSvgElement(n, v) {
   n = document.createElementNS("http://www.w3.org/2000/svg", n);
   for (let p in v)
     n.setAttributeNS(null, p, v[p]);

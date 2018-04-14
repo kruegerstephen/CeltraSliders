@@ -1,10 +1,9 @@
 .grid{
     display: grid;
     grid-template-areas:
-        " pagetitle pagetitle "
-        " . spinners "
-        " . values";
-    grid-template-columns: auto;
+        "  . pagetitle pagetitle . "
+        "  . values spinners .";
+    grid-template-columns: 1fr 2fr 8fr;
     grid-template-rows: auto;
     grid-row-gap: 100px;
     

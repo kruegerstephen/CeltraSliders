@@ -1,13 +1,16 @@
 function CircleWidget(options){
-        this.id = options.id,
-        this.color = options.color,
-        this.maxVal= options.maxVal,
-        this.minVal= options.minVal,
-        this.step= options.step,
-        this.x = options.x,
-        this.y = options.y,
-        this.radius= options.radius,
-        this.strokewidth= 25;
+    
+        let defaultFlag = false;
+        if(options === undefined){
+            defaultFlag = true;
+        }
+    
+        this.color  = defaultFlag ? options.color  :  "blue",
+        this.maxVal = defaultFlag ? options.maxVal : 100,
+        this.minVal = defaultFlag ? options.minVal : 0,
+        this.step   = defaultFlag ? options.step   : 1,
+        this.radius = defaultFlag ? options.radius : circleRadiusSpacer(),
+        this.strokewidth = defaultFlag ? options.strokewidth : 30;
 }
 
 
@@ -25,7 +28,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
     
         let startAngle = -90*Math.PI/180;
 
-    
+        //Resize the SVG if the circle will be out of the viewbox
         if(container.width.baseVal.value < this.radius*2.5 || container.height.baseVal.value<this.radius*2.5){
           resizeSVG(this, startAngle);
         }
@@ -36,7 +39,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
        this.id = circleID;
     
     
-        let r = getNode("circle", { id : circleID,
+        let circleSlider = createSvgElement("circle", { id : circleID,
                                     cx : centerContainer,
                                     cy : centerContainer,
                                     r  : this.radius,
@@ -46,19 +49,15 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                     step : this.step,
                                     fill : "none",
                                     stroke : "grey",
+                                    "stroke-opacity" : .4,
                                     "stroke-width": this.strokewidth
                                     });
 
-        let knobXY = getKnobPosition(startAngle, this.radius, centerContainer);
     
-        let x = getNode("circle", { pID : circleID,
-                                    cx : knobXY.knobX,
-                                    cy : knobXY.knobY,
-                                    r : this.radius/7,
-                                    fill : "silver",
-                                    stroke : "none"});
-        container.appendChild(r);
-        container.appendChild(x);
+        let knob = this.CreateKnob();
+        
+        container.appendChild(circleSlider);
+        container.appendChild(knob);
         this.container = container;
         this.svgElem = r;
 
@@ -67,14 +66,24 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
 
 
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
+        
         let knob = getAllKnobs.call().filter(kn => kn.getAttribute("pID") == this.id)[0];
+       
+        //
         knob.addEventListener("touchstart", start , false);
         knob.addEventListener("touchmove", move , false);
         knob.addEventListener("touchend", end , false);
+        
         knob.addEventListener("mousedown", start , false);
+    
         this.container.addEventListener("mouseup", end , true);
         this.container.addEventListener("mousemove", move, true);
+        this.container.addEventListener("mouseup", end , true);
+        this.container.addEventListener("mousemove", move, true);
+        
         this.svgElem.addEventListener("click", move, false);
+        this.svgElem.addEventListener("touchenter", move, false);
+
 };
 
 CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
@@ -88,6 +97,18 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
        
 };
 
+
+CircleWidget.prototype.CreateKnob = function CreateKnob(){
+    
+    let knobXY = getKnobPosition(startAngle, this.radius, centerContainer);
+    
+    return createSvgElement("circle", { pID  : circleID,
+                                        cx   : knobXY.knobX,
+                                        cy   : knobXY.knobY,
+                                        r    : this.strokewidth-10,
+                                        fill : "#EDEEEE",
+                                        stroke : "none"});
+}
 
 
  
@@ -124,9 +145,10 @@ function drawPath(fullSlider, angle){
     
      let strokewidth = circle.attributes["stroke-width"].value;
 
-     let x = getNode("path", {  pathID : circle.id,
+     let x = createSvgElement("path", {  pathID : circle.id,
                                 fill : "none",
                                 stroke : circle.attributes.strokeColor.value,
+                                "stroke-opacity" : .8,
                                 "stroke-width":strokewidth,
                                 d:generateArc(circle, Math.abs(angle-180))});
 
@@ -176,5 +198,9 @@ function generateArc(circle, endAngle){
     ].join(" ");
 }
 
+
+function circleRadiusSpacer(){    
+    return 50 + getAllCircles().length * 50;
+}
 
 

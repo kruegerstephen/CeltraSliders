@@ -8,8 +8,7 @@
  
     function move(e){
               if(allowMove || e.type == "click"){                       
-        
-                  
+
                   let containerCenterW = container.clientWidth/2;
                   let slilderCircle;
                 
@@ -32,8 +31,8 @@
                       }
                   }
                   else if(e.type == "touchmove"){
-                     y = containerCenterW- e.touches[0].pageY;
-                     x = e.touches[0].pageX - containerCenterW;
+                     y = containerCenterW- e.touches[0].pageY + 50;
+                     x = e.touches[0].pageX - containerCenterW + 50;
                      sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
   
                   }
