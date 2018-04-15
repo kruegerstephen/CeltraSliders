@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function(){
         color: "#FC4346",
         maxVal: 100,
         minVal: 10,
-        step: 10,      
+        step: 1,      
         radius: 100,
         strokewidth: 30,
         smoothscroll : false,
@@ -16,12 +16,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
     let options2 =  {
         color: "#F3781C",
-        maxVal: 300,
-        minVal: 0,
-        step: 50,      
+        maxVal: 100,
+        minVal: 5,
+        step: 10,      
         radius: 150,
         strokewidth: 30,
-        smoothscroll : false,
+        smoothscroll : true,
         name : "Food"
     };    
     
@@ -62,12 +62,10 @@ document.addEventListener('DOMContentLoaded', function(){
     
     CreateCircle(options);
     CreateCircle(options2);
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
+    CreateCircle(options3);
+    CreateCircle(options4);
+    CreateCircle(options5);
+
 
 
     
