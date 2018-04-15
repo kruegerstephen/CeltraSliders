@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function(){
         radius: 300,
         strokewidth: 30,
         smoothscroll : false,
-        name "Healthcare"
+        name : "Healthcare"
     };    
     
     CreateCircle(options);

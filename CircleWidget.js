@@ -21,7 +21,7 @@ function CircleWidget(options){
             defaultFlag = true;
         }
     
-        this.name   = defaultFlag ? null    : options.name
+        this.name   = defaultFlag ? "circle"    : options.name
         this.color  = defaultFlag ? "blue"  : options.color;
         this.maxVal = defaultFlag ? 100     : options.maxVal;
         this.minVal = defaultFlag ? 0       : options.minVal;
@@ -96,10 +96,25 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
        //let displayCase = document.createElement('div');
        //displayCase.id = "displayCase";
        //body.appendChild(displayCase);
-       let valueDisplay = document.createElement('div');
-       valueDisplay.id = this.id + "display";
-       displayCase.appendChild(valueDisplay);
-       
+       let valBox = document.createElement('div');
+       let valBoxName = document.createElement('div');
+       let valBoxValue = document.createElement('div');
+       let valBoxColor = document.createElement('div');
+       valBox.id = this.id + "display";
+       valBox.style.display = "inline-flex"
+       valBoxName.innerHTML = this.name + ":";
+       valBoxValue.innerHTML = this.minVal;
+       valBoxValue.id = this.id + "valueDisp";
+       valBoxColor.style.height = "20px";
+       valBoxColor.style.width = "20px";
+       valBoxColor.style.float ="right";
+       valBoxColor.style.marginLeft = "10px";
+       valBoxValue.style.marginLeft = "10px";
+       valBoxColor.style.background = this.color;
+       displayCase.appendChild(valBox);
+       valBox.appendChild(valBoxName);
+       valBox.appendChild(valBoxValue);
+       valBox.appendChild(valBoxColor);
 };
 
 
@@ -128,6 +143,7 @@ function getStepAngle(circle, angle){
     let numSteps = ((circle.attributes.maxVal.value-circle.attributes.minVal.value)/circle.attributes.step.value);
     
     let stepAngle;
+    
     if(circle.attributes.smoothscroll.value.toLowerCase() == "true"){
          stepAngle = (angle/(360/numSteps) * (360/numSteps)); 
     }else{

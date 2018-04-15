@@ -26,9 +26,7 @@ function valueConversion(fullSlider, angle){
 
 
 function displayValue(circle, value){
-    let circleDisplayID = circle.id + "display";
+    let circleDisplayID = circle.id + "valueDisp";
     let dispDIV = document.getElementById(circleDisplayID);
-    dispDIV.style.display = "inline-flex"
-    dispDIV.innerHTML = circle.id + " : " + value.toString() 
-    + "<div id='colorBox' style='width:50px; height:50px; margin-left:20px; background-color:" + circle.attributes.strokeColor.value + "'></div>";
+    dispDIV.innerHTML = value;
 }

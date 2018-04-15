@@ -2,8 +2,7 @@
     display: grid;
     grid-template-areas:
         "  . pagetitle pagetitle . "
-        "  . spinners spinners ."
-        "  . values values .";
+        "  values spinners spinners .";
     grid-template-columns: .25fr 1fr 1fr .25fr;
     grid-template-rows: auto;
     grid-row-gap: 100px;
@@ -12,13 +11,14 @@
 
 #spinners{
     grid-area: spinners;
+    justify-self:center;
 }
 
 #displayCase{
     grid-area: values;
     text-align: center;
     align-self: center;
-    font-size: 40px;
+    font-size: 1.3em;
     display: grid;
     grid-gap: 15px; 
 }
@@ -31,14 +31,13 @@
 
 body{
     height: 100%;
-    overflow: hidden;
     width: 100%;
-    position: fixed;
+ 
 }
 
 #container{
   width: 100%;
-  max-width: 100%; 
+  max-width: 700px; 
   height:auto;
 
 }
