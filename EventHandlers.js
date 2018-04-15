@@ -19,7 +19,6 @@
                   {
                      y = containerCenterW- e.offsetY;
                      x = e.offsetX - containerCenterW; 
-                     console.log(x,y);
                      sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
   
                   }else if(e.type == "click"){
@@ -33,15 +32,20 @@
                       }
                   }
                   else if(e.type == "touchmove"){
-                     y = containerCenterW - e.touches[0].pageY + 50;
-                     x = e.touches[0].pageX - window.innerWidth + container.clientWidth;
+                     y = container.getBoundingClientRect().top + document.documentElement.scrollTop + containerCenterW - e.touches[0].pageY;
+                     x = e.touches[0].pageX - container.getBoundingClientRect().left + document.documentElement.scrollLeft - containerCenterW;
                      sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
+                      console.log(x,y);
   
                   }
 
                 let radian = Math.atan2(y, x);
                 let angle = radian*180/Math.PI;
-                moveKnob(sliderCircle, angle);
+                let stepAngle = getStepAngle(sliderCircle.sCircle, angle);
+                  
+                moveKnob(sliderCircle, stepAngle);
+                drawPath(sliderCircle, stepAngle);
+                valueConversion(sliderCircle, stepAngle);
 
               }
             

@@ -8,15 +8,14 @@ function valueConversion(fullSlider, angle){
     let value = ((angle+180)/360) * stepVal;
     value = Math.abs((stepVal)-Math.round(value/step)*step);
     
-
     
   if(value+minVal >= maxVal){
         value = maxVal;
+        moveKnob(fullSlider, -179);
         drawPath(fullSlider, -179);
-   }else if((value+minVal+step) >= maxVal){
-       value= value + minVal;
-       circle.fullStop = true;
-   }else{
+        circle.fullStop = false;
+   }  
+    else{
       value = value + minVal;
        circle.fullStop = false;
    }

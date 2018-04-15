@@ -2,7 +2,8 @@
     display: grid;
     grid-template-areas:
         "  . pagetitle pagetitle . "
-        "  . values spinners .";
+        "  . spinners spinners ."
+        "  . values values .";
     grid-template-columns: 1fr 2fr 8fr;
     grid-template-rows: auto;
     grid-row-gap: 100px;

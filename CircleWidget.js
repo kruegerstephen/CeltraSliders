@@ -103,33 +103,37 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
 
 
  
-function moveKnob(fullSlider, angle){
+function moveKnob(fullSlider, stepAngle){
     
     let circle = fullSlider.sCircle;
-    let numSteps = ((circle.attributes.maxVal.value-circle.attributes.minVal.value)/circle.attributes.step.value);
     let radius = circle.r.baseVal.value;
     let centerX = circle.cx.baseVal.value;
     
-    let stepAngle;
-    if(circle.attributes.smoothscroll.value.toLowerCase() == "true"){
-         stepAngle = (angle/(360/numSteps) * (360/numSteps)); 
-    }else{
-         stepAngle = Math.round((angle/(360/numSteps) * (360/numSteps))); 
-    }
-    
-    let radian = stepAngle*Math.PI/180;
+    let radian = toRadian(stepAngle);
     
     let newY = -Math.round(Math.sin(radian)*radius) + centerX;
     let newX = Math.round(Math.cos(radian)*radius)+ centerX;
     
     fullSlider.sKnob.cx.baseVal.value = newX;
     fullSlider.sKnob.cy.baseVal.value = newY;
-
-    drawPath(fullSlider, stepAngle);
-    valueConversion(fullSlider, stepAngle);
     
     //moves knob to bottom of dom, which keeps it on top of all other elements
     container.appendChild(fullSlider.sKnob);
+}
+
+
+function getStepAngle(circle, angle){
+     
+    let numSteps = ((circle.attributes.maxVal.value-circle.attributes.minVal.value)/circle.attributes.step.value);
+    
+    let stepAngle;
+    if(circle.attributes.smoothscroll.value.toLowerCase() == "true"){
+         stepAngle = (angle/(360/numSteps) * (360/numSteps)); 
+    }else{
+         stepAngle = Math.round((angle/(360/numSteps))) * (360/numSteps); 
+    }
+    
+    return stepAngle;
 }
 
 
@@ -168,7 +172,7 @@ function getKnobPosition(angle, radius, centerContainer){
 }
 
  function findPathXY(centerX, centerY, radius, angle) {
-      let radians = (angle-180) * Math.PI / 180.0;
+      let radians = toRadian(angle-180);
       return {
         x: centerX + (radius * Math.cos(radians)),
         y: centerY + (radius * Math.sin(radians))
@@ -196,5 +200,7 @@ function generateArc(circle, endAngle){
 function circleRadiusSpacer(){    
     return 50 + getAllCircles().length * 50;
 }
+
+const toRadian = (angle) => angle * Math.PI/180;
 
 
