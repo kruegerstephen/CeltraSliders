@@ -26,6 +26,7 @@ function CircleWidget(options){
         this.minVal = defaultFlag ? 0       : options.minVal;
         this.step   = defaultFlag ? 1       : options.step;
         this.strokewidth = defaultFlag ? 30 : options.strokewidth;
+        this.smoothscroll  = defaultFlag ? false  : options.smoothscroll;
         this.radius = defaultFlag ? circleRadiusSpacer() : options.radius;
 
         this.id = "circ" + getAllCircles().length.toString(); 
@@ -49,6 +50,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                                     fill : "none",
                                                     stroke : "grey",
                                                     startAngle : this.startAngle,
+                                                    smoothscroll : this.smoothscroll,
                                                     "stroke-opacity" : .4,
                                                     "stroke-width": this.strokewidth
                                                     });
@@ -104,11 +106,17 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
 function moveKnob(fullSlider, angle){
     
     let circle = fullSlider.sCircle;
-    let step = (circle.attributes.maxVal.value-circle.attributes.minVal.value)/circle.attributes.step.value;
+    let numSteps = ((circle.attributes.maxVal.value-circle.attributes.minVal.value)/circle.attributes.step.value);
     let radius = circle.r.baseVal.value;
     let centerX = circle.cx.baseVal.value;
     
-    let stepAngle = Math.round(angle/(360/step)) * (360/step);    
+    let stepAngle;
+    if(circle.attributes.smoothscroll.value.toLowerCase() == "true"){
+         stepAngle = (angle/(360/numSteps) * (360/numSteps)); 
+    }else{
+         stepAngle = Math.round((angle/(360/numSteps) * (360/numSteps))); 
+    }
+    
     let radian = stepAngle*Math.PI/180;
     
     let newY = -Math.round(Math.sin(radian)*radius) + centerX;
@@ -176,7 +184,7 @@ function generateArc(circle, endAngle){
     let start = findPathXY(centerX, centerY, radius, 0);
     let end = findPathXY(centerX, centerY, radius, endAngle);
 
-    let largeArcFlag = endAngle - 0 <= 180 ? "0" : "1";
+    let largeArcFlag = endAngle <= 180 ? "0" : "1";
 
     return d = [
         "M", end.x, end.y, 

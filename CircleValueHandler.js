@@ -3,17 +3,24 @@ function valueConversion(fullSlider, angle){
     circle = fullSlider.sCircle;
     let maxVal = parseInt(circle.attributes.maxVal.value);
     let minVal = parseInt(circle.attributes.minVal.value);
-    let step = circle.attributes.step.value;
-    let value = ((angle+180)/360) * maxVal;
+    let stepVal = maxVal-minVal;
+    let step = parseInt(circle.attributes.step.value);
+    let value = ((angle+180)/360) * stepVal;
+    value = Math.abs((stepVal)-Math.round(value/step)*step);
     
-    value = Math.abs((maxVal)-Math.ceil(value/step)*step);
+
     
-    if(value >= maxVal){
+  if(value+minVal >= maxVal){
         value = maxVal;
         drawPath(fullSlider, -179);
-    }else{
-        value = value + minVal;
-    }
+   }else if((value+minVal+step) >= maxVal){
+       value= value + minVal;
+       circle.fullStop = true;
+   }else{
+      value = value + minVal;
+       circle.fullStop = false;
+   }
+    
 
     displayValue(circle, value);
 }

@@ -5,29 +5,32 @@ document.addEventListener('DOMContentLoaded', function(){
     
     let options =  {
         color: "#FC4346",
-        maxVal: 14,
-        minVal: 4,
-        step: 4,      
+        maxVal: 77,
+        minVal: 12,
+        step: 9,      
         radius: 100,
-        strokewidth: 30
+        strokewidth: 30,
+        smoothscroll : false
     };    
 
     let options2 =  {
         color: "#F3781C",
         maxVal: 300,
         minVal: 50,
-        step: 5,      
+        step: 50,      
         radius: 150,
-        strokewidth: 30
+        strokewidth: 30,
+        smoothscroll : false
     };    
     
     let options3 =  {
         color: "#009E23",
-        maxVal: 10,
-        minVal: 1,
-        step: 3,      
+        maxVal: 20,
+        minVal: 4,
+        step: 2,      
         radius: 200,
-        strokewidth: 30
+        strokewidth: 30,
+        smoothscroll : true
     };    
     
     let options4 =  {
@@ -36,7 +39,8 @@ document.addEventListener('DOMContentLoaded', function(){
         minVal: 50,
         step: 5,      
         radius: 250,
-        strokewidth: 30
+        strokewidth: 30,
+        smoothscroll : true
     };    
     
     let options5 =  {
@@ -45,14 +49,18 @@ document.addEventListener('DOMContentLoaded', function(){
         minVal: 50,
         step: 5,      
         radius: 300,
-        strokewidth: 30
+        strokewidth: 30,
+        smoothscroll : false
     };    
     
-    CreateCircle(options3);
     CreateCircle(options);
     CreateCircle(options2);
-    CreateCircle(options5);
+    CreateCircle(options3);
     CreateCircle(options4);
+
+
+
+
 
 
 }, false);

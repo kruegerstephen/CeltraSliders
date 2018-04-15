@@ -36,7 +36,6 @@
                      y = containerCenterW - e.touches[0].pageY + 50;
                      x = e.touches[0].pageX - window.innerWidth + container.clientWidth;
                      sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
-                     console.log(x,y)
   
                   }
 
