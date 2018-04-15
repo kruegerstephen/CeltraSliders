@@ -8,7 +8,7 @@ function CreateCircle(options){
     circle.CreateDisplayField();  
     
     //Resize the SVG if the circle will be out of the viewbox
-    if(container.clientWidth < circle.radius*2.5 || container.clientHeight< circle.radius*2.5){
+    if(container.clientWidth <= circle.radius*2.75 || container.clientHeight <= circle.radius*2.75){
        resizeSVG(circle);
     }
 }
@@ -21,6 +21,7 @@ function CircleWidget(options){
             defaultFlag = true;
         }
     
+        this.name   = defaultFlag ? null    : options.name
         this.color  = defaultFlag ? "blue"  : options.color;
         this.maxVal = defaultFlag ? 100     : options.maxVal;
         this.minVal = defaultFlag ? 0       : options.minVal;
@@ -28,7 +29,7 @@ function CircleWidget(options){
         this.strokewidth = defaultFlag ? 30 : options.strokewidth;
         this.smoothscroll  = defaultFlag ? false  : options.smoothscroll;
         this.radius = defaultFlag ? circleRadiusSpacer() : options.radius;
-
+        console.log(this.radius)
         this.id = "circ" + getAllCircles().length.toString(); 
         this.startAngle = -90*Math.PI/180;
         this.cx = container.clientWidth/2;
@@ -43,12 +44,13 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                                     cx : this.cx,
                                                     cy : this.cy,
                                                     r  : this.radius,
-                                                    strokeColor: this.color,
+                                                    step : this.step,
+                                                    name : this.name,
+                                                    fill : "none",
                                                     maxVal : this.maxVal,
                                                     minVal : this.minVal,
-                                                    step : this.step,
-                                                    fill : "none",
                                                     stroke : "grey",
+                                                    strokeColor: this.color,
                                                     startAngle : this.startAngle,
                                                     smoothscroll : this.smoothscroll,
                                                     "stroke-opacity" : .4,
@@ -116,7 +118,6 @@ function moveKnob(fullSlider, stepAngle){
     
     fullSlider.sKnob.cx.baseVal.value = newX;
     fullSlider.sKnob.cy.baseVal.value = newY;
-    
     //moves knob to bottom of dom, which keeps it on top of all other elements
     container.appendChild(fullSlider.sKnob);
 }
@@ -198,7 +199,7 @@ function generateArc(circle, endAngle){
 
 
 function circleRadiusSpacer(){    
-    return 50 + getAllCircles().length * 50;
+    return 50 + ((getAllCircles().length)+1) * 50;
 }
 
 const toRadian = (angle) => angle * Math.PI/180;

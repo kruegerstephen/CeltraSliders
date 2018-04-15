@@ -4,7 +4,7 @@
         "  . pagetitle pagetitle . "
         "  . spinners spinners ."
         "  . values values .";
-    grid-template-columns: 1fr 2fr 8fr;
+    grid-template-columns: .25fr 1fr 1fr .25fr;
     grid-template-rows: auto;
     grid-row-gap: 100px;
     
@@ -34,4 +34,11 @@ body{
     overflow: hidden;
     width: 100%;
     position: fixed;
+}
+
+#container{
+  width: 100%;
+  max-width: 100%; 
+  height:auto;
+
 }

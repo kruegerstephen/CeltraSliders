@@ -43,8 +43,8 @@
                 let angle = radian*180/Math.PI;
                 let stepAngle = getStepAngle(sliderCircle.sCircle, angle);
                   
-                moveKnob(sliderCircle, stepAngle);
                 drawPath(sliderCircle, stepAngle);
+                moveKnob(sliderCircle, stepAngle);
                 valueConversion(sliderCircle, stepAngle);
 
               }

@@ -39,8 +39,10 @@ function createSvgElement(n, v) {
 
 function resizeSVG(circle){
 
-    container.width.baseVal.value = circle.radius*3;
-    container.height.baseVal.value = circle.radius*3;
+    container.width.baseVal.value = circle.radius*2.75;
+    container.height.baseVal.value = circle.radius*2.75;
+    let viewBoxString = "0 0 " + circle.radius*2.75 + " " + circle.radius*2.75;
+    container.setAttribute("viewBox", viewBoxString)
 
     let centerContainer = container.width.baseVal.value/2;
 

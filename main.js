@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function(){
         step: 10,      
         radius: 100,
         strokewidth: 30,
-        smoothscroll : false
+        smoothscroll : false,
+        name : "Transportation"
     };    
 
     let options2 =  {
@@ -20,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function(){
         step: 50,      
         radius: 150,
         strokewidth: 30,
-        smoothscroll : false
+        smoothscroll : false,
+        name : "Food"
     };    
     
     let options3 =  {
@@ -30,7 +32,9 @@ document.addEventListener('DOMContentLoaded', function(){
         step: 2,      
         radius: 200,
         strokewidth: 30,
-        smoothscroll : false
+        smoothscroll : false,
+        name : "Insurance"
+
     };    
     
     let options4 =  {
@@ -40,7 +44,9 @@ document.addEventListener('DOMContentLoaded', function(){
         step: 5,      
         radius: 250,
         strokewidth: 30,
-        smoothscroll : true
+        smoothscroll : true,
+        name : "Entertainment"
+
     };    
     
     let options5 =  {
@@ -50,17 +56,21 @@ document.addEventListener('DOMContentLoaded', function(){
         step: 5,      
         radius: 300,
         strokewidth: 30,
-        smoothscroll : false
+        smoothscroll : false,
+        name "Healthcare"
     };    
     
     CreateCircle(options);
     CreateCircle(options2);
-    CreateCircle(options3);
-    CreateCircle(options4);
     CreateCircle();
     CreateCircle();
     CreateCircle();
     CreateCircle();
+    CreateCircle();
+    CreateCircle();
+
+
+    
 
 
 
@@ -76,8 +86,10 @@ document.addEventListener('DOMContentLoaded', function(){
 function createSVG(){
     return createSvgElement("svg", {
                             id:"container",
-                            width:300,
-                            height:300
+                            preserveAspectRatio: "xMidYMid slice",
+                            viewBox: "0 0 1500 1500",
+                            width: "100",
+                            height: "100"
                           })
     
 }
