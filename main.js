@@ -60,21 +60,14 @@ document.addEventListener('DOMContentLoaded', function(){
         name : "Healthcare"
     };    
     
+    
+    
+    
     CreateCircle(options);
     CreateCircle(options2);
     CreateCircle(options3);
     CreateCircle(options4);
     CreateCircle(options5);
-
-
-
-    
-
-
-
-
-
-
 
 }, false);
 
@@ -85,7 +78,7 @@ function createSVG(){
     return createSvgElement("svg", {
                             id:"container",
                             preserveAspectRatio: "xMidYMid slice",
-                            viewBox: "0 0 1500 1500",
+                            viewBox: "1 1 1500 1500",
                             width: "100",
                             height: "100"
                           })

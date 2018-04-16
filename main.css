@@ -22,6 +22,7 @@
     font-size: 1.3em;
     display: grid;
     grid-gap: 15px; 
+    margin-left:15px;
 }
 
 #pageTitle{
@@ -30,17 +31,10 @@
     font-size: 40px;
 }
 
-body{
-    height: 100%;
-    width: 100%;
- 
-}
-
 #container{
-  width: 100%;
+  width: 98%;
   max-width: 700px; 
-  height:auto;
-
+  height:98%;
 }
 
 @media (min-width:320px)  { /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */ }

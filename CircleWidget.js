@@ -14,6 +14,7 @@ function CreateCircle(options){
 }
 
 
+/*Constructor - creates circle object*/
 function CircleWidget(options){
     
         let defaultFlag = false;
@@ -21,7 +22,7 @@ function CircleWidget(options){
             defaultFlag = true;
         }
     
-        this.name   = defaultFlag ? "circle"    : options.name;
+        this.name   = defaultFlag ? "circle": options.name;
         this.color  = defaultFlag ? "blue"  : options.color;
         this.maxVal = defaultFlag ? 100     : options.maxVal;
         this.minVal = defaultFlag ? 0       : options.minVal;
@@ -31,12 +32,12 @@ function CircleWidget(options){
         this.radius = defaultFlag ? circleRadiusSpacer() : options.radius;
 
         this.id = "circ" + getAllCircles().length.toString(); 
-        this.startAngle = -90*Math.PI/180;
+        this.startAngle = toRadian(-90);
         this.cx = container.clientWidth/2;
         this.cy = container.clientWidth/2;
-
 }
 
+/*Creates the circle slider SVG and appends it to the container*/
 CircleWidget.prototype.DrawCircle = function drawCircle(){
 
 
@@ -61,6 +62,8 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
      
 };
 
+
+/*Creates the Knob SVG and appends it to the container*/
 CircleWidget.prototype.CreateKnob = function CreateKnob(){
     
     let knobXY = getKnobPosition(this.startAngle, this.radius, this.cx);
@@ -75,6 +78,7 @@ CircleWidget.prototype.CreateKnob = function CreateKnob(){
     container.appendChild(this.knob);
 }
 
+/*Add event handlers for mouse and touch*/
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
         
              
@@ -91,27 +95,32 @@ CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
 
 };
 
+
+/*Creates the display boxes that show circle name, value, and color of the slider*/
 CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
-       //var body = document.getElementsByTagName("body")[0];
-       //let displayCase = document.createElement('div');
-       //displayCase.id = "displayCase";
-       //body.appendChild(displayCase);
+       
        let valBox = document.createElement('div');
        let valBoxName = document.createElement('div');
        let valBoxValue = document.createElement('div');
        let valBoxColor = document.createElement('div');
+       
        valBox.id = this.id + "display";
        valBox.style.display = "inline-flex"
+       
        valBoxName.innerHTML = this.name + ":";
+       
        valBoxValue.innerHTML = this.minVal;
        valBoxValue.id = this.id + "valueDisp";
+       
        valBoxColor.style.height = "20px";
        valBoxColor.style.width = "20px";
        valBoxColor.style.float ="right";
        valBoxColor.style.marginLeft = "10px";
        valBoxValue.style.marginLeft = "10px";
        valBoxColor.style.background = this.color;
+       
        displayCase.appendChild(valBox);
+       
        valBox.appendChild(valBoxName);
        valBox.appendChild(valBoxValue);
        valBox.appendChild(valBoxColor);
@@ -119,7 +128,8 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
 
 
 
- 
+/*takes the knobs current angle and increases it by 
+the angle of one step.*/
 function moveKnob(fullSlider, stepAngle){
     
     let circle = fullSlider.sCircle;
@@ -129,6 +139,7 @@ function moveKnob(fullSlider, stepAngle){
     
     let radian = toRadian(stepAngle);
     
+    //gets new x,y coordinates for the knob based on the stepAngle
     let newY = -Math.round(Math.sin(radian)*radius) + centerX;
     let newX = Math.round(Math.cos(radian)*radius)+ centerX;
     
@@ -140,6 +151,8 @@ function moveKnob(fullSlider, stepAngle){
 }
 
 
+
+/*Calculates the angle of each step around the circle*/
 function getStepAngle(circle, angle){
      
     let numSteps = ((circle.attributes.maxVal.value-circle.attributes.minVal.value)/circle.attributes.step.value);
@@ -156,12 +169,14 @@ function getStepAngle(circle, angle){
 }
 
 
+/*Creates the Path based on knob position in the circle 
+  and appends it to the SVG. 
+  Will replace the current path if there is one*/
 function drawPath(fullSlider, angle){
          
-     let currPath = getAllPaths().filter(child => child.attributes.pathID.value == fullSlider.sCircle.id)[0]; 
      let circle = fullSlider.sCircle;  
-    
      let strokewidth = circle.attributes["stroke-width"].value;
+     let currPath = getAllPaths().filter(child => child.attributes.pathID.value == circle.id)[0]; 
 
      let path = createSvgElement("path", {  pathID : circle.id,
                                 fill : "none",
@@ -198,6 +213,7 @@ function getKnobPosition(angle, radius, centerContainer){
       };
     }
 
+/*Generates the 'arc' of the path. In Svg it is the 'A' part of the whole path;*/
 function generateArc(circle, endAngle){
 
     let radius = circle.r.baseVal.value;
@@ -216,6 +232,7 @@ function generateArc(circle, endAngle){
 }
 
 
+/*auto calculates radius of default circles*/
 function circleRadiusSpacer(){    
     return 50 + ((getAllCircles().length)+1) * 50;
 }
