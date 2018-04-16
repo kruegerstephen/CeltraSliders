@@ -1,3 +1,4 @@
+/*Finds value based on current angle*/
 function valueConversion(fullSlider, stepAngle, angle){
     
     circle = fullSlider.sCircle;
@@ -6,12 +7,10 @@ function valueConversion(fullSlider, stepAngle, angle){
     let stepVal = maxVal-minVal;
     let step = parseInt(circle.attributes.step.value);
     let value = ((stepAngle+180)/360) * stepVal;
-    console.log((stepAngle+180)/360);
     value = Math.abs((stepVal)-Math.floor(value/step)*step);
     let floorVal = stepVal- Math.abs((stepVal)-Math.floor(value/step)*step);
     let ceilVal =  stepVal - Math.abs((stepVal)-Math.ceil(value/step)*step);
     let unrounded = stepVal - Math.abs((stepVal)-(value/step)*step);
-    console.log(angle, stepAngle);
     
     if(-175 >= angle && angle >= -179 && value<=stepVal)
   {
@@ -37,7 +36,7 @@ function valueConversion(fullSlider, stepAngle, angle){
     displayValue(circle, value);
 }
 
-
+/*displays value in DOM*/
 function displayValue(circle, value){
     let circleDisplayID = circle.id + "valueDisp";
     let dispDIV = document.getElementById(circleDisplayID);

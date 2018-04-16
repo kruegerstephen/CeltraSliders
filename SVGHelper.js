@@ -18,6 +18,8 @@ function getPathById(id){
     getAllPaths.call().filter(child => child.attributes.pathID.value == id)[0]; 
 }
 
+
+/*gets the full slider - circle, knob, path - based on the circle id */
 function getSliderPartsByID(id){
     
     let sliderCircle = getAllCircles.call().filter(child => child.id == id && child.attributes.pID == undefined)[0];
@@ -30,6 +32,8 @@ function getSliderPartsByID(id){
     }
 }
 
+
+/*creates an svg element - */
 function createSvgElement(n, v) {
   n = document.createElementNS("http://www.w3.org/2000/svg", n);
   for (let p in v)
@@ -37,6 +41,8 @@ function createSvgElement(n, v) {
   return n
 };
 
+
+/*resizes the svg to fit the current circle*/ 
 function resizeSVG(circle){
 
     container.width.baseVal.value = circle.radius*2.75;
@@ -48,9 +54,9 @@ function resizeSVG(circle){
 
     let allCircles = getAllCircles();
 
-    for(let circle of allCircles){
+    for(let currCircle of allCircles){
 
-        let slider = getSliderPartsByID(circle.id);
+        let slider = getSliderPartsByID(currCircle.id);
 
         slider.sCircle.cx.baseVal.value = centerContainer;
         slider.sCircle.cy.baseVal.value = centerContainer;

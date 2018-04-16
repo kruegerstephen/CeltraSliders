@@ -1,11 +1,12 @@
     let allowMove = false;
 
+    /*monitors what knob was clicked to start drag*/
     function start(e){
       moveThisKnob = this;
       allowMove = true;
     }
 
- 
+    /*moves the slider and the knob*/
     function move(e){
         e.preventDefault();
               if(allowMove || e.type == "click"){                       
@@ -42,7 +43,8 @@
                 let radian = Math.atan2(y, x);
                 let angle = radian*180/Math.PI;
                 let stepAngle = getStepAngle(sliderCircle.sCircle, angle);
-                  console.log(angle);
+
+                  
                 drawPath(sliderCircle, stepAngle);
                 moveKnob(sliderCircle, stepAngle);
                 valueConversion(sliderCircle, stepAngle, angle);
