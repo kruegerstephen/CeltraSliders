@@ -48,14 +48,6 @@ body{
 @media (min-width:600px)  { /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */ }
 
 @media (min-width:801px)  { 
-    .grid{
-    display: grid;
-    grid-template-areas:
-        "  . pagetitle pagetitle . "
-        "  values spinners spinners .";
-    grid-template-columns: .25fr 1fr 1fr .25fr;
-    grid-template-rows: auto;
-    grid-row-gap: 100px;
     
 } }
 
