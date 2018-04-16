@@ -6,7 +6,6 @@
       allowMove = true;
     }
 
-    /*moves the slider and the knob*/
     function move(e){
         e.preventDefault();
               if(allowMove || e.type == "click"){                       

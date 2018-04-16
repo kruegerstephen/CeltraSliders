@@ -14,7 +14,6 @@ function CreateCircle(options){
 }
 
 
-/*Constructor - creates circle object*/
 function CircleWidget(options){
     
         let defaultFlag = false;
@@ -37,7 +36,6 @@ function CircleWidget(options){
         this.cy = container.clientWidth/2;
 }
 
-/*Creates the circle slider SVG and appends it to the container*/
 CircleWidget.prototype.DrawCircle = function drawCircle(){
 
 
@@ -63,7 +61,6 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
 };
 
 
-/*Creates the Knob SVG and appends it to the container*/
 CircleWidget.prototype.CreateKnob = function CreateKnob(){
     
     let knobXY = getKnobPosition(this.startAngle, this.radius, this.cx);
@@ -78,7 +75,6 @@ CircleWidget.prototype.CreateKnob = function CreateKnob(){
     container.appendChild(this.knob);
 }
 
-/*Add event handlers for mouse and touch*/
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
         
              
@@ -114,7 +110,7 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
        
        valBoxColor.style.height = "20px";
        valBoxColor.style.width = "20px";
-       valBoxColor.style.float ="right";
+       valBoxColor.style.float = "right";
        valBoxColor.style.marginLeft = "10px";
        valBoxValue.style.marginLeft = "10px";
        valBoxColor.style.background = this.color;
@@ -132,10 +128,8 @@ CircleWidget.prototype.CreateDisplayField =  function CreateDisplayField(){
 the angle of one step.*/
 function moveKnob(fullSlider, stepAngle){
     
-    let circle = fullSlider.sCircle;
-    let knob = fullSlider.sKnob;
-    let radius = circle.r.baseVal.value;
-    let centerX = circle.cx.baseVal.value;
+    let radius = fullSlider.sCircle.r.baseVal.value;
+    let centerX = fullSlider.sCircle.cx.baseVal.value;
     
     let radian = toRadian(stepAngle);
     
@@ -143,11 +137,11 @@ function moveKnob(fullSlider, stepAngle){
     let newY = -Math.round(Math.sin(radian)*radius) + centerX;
     let newX = Math.round(Math.cos(radian)*radius)+ centerX;
     
-    knob.cx.baseVal.value = newX;
-    knob.cy.baseVal.value = newY;
+    fullSlider.sKnob.cx.baseVal.value = newX;
+    fullSlider.sKnob.cy.baseVal.value = newY;
     
     //moves knob to bottom of dom, which keeps it on top of all other elements
-    container.appendChild(knob);
+    container.appendChild(fullSlider.sKnob);
 }
 
 
@@ -169,9 +163,6 @@ function getStepAngle(circle, angle){
 }
 
 
-/*Creates the Path based on knob position in the circle 
-  and appends it to the SVG. 
-  Will replace the current path if there is one*/
 function drawPath(fullSlider, angle){
          
      let circle = fullSlider.sCircle;  
@@ -213,7 +204,6 @@ function getKnobPosition(angle, radius, centerContainer){
       };
     }
 
-/*Generates the 'arc' of the path. In Svg it is the 'A' part of the whole path;*/
 function generateArc(circle, endAngle){
 
     let radius = circle.r.baseVal.value;

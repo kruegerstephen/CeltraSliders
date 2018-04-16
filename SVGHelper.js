@@ -19,7 +19,6 @@ function getPathById(id){
 }
 
 
-/*gets the full slider - circle, knob, path - based on the circle id */
 function getSliderPartsByID(id){
     
     let sliderCircle = getAllCircles.call().filter(child => child.id == id && child.attributes.pID == undefined)[0];
@@ -33,7 +32,6 @@ function getSliderPartsByID(id){
 }
 
 
-/*creates an svg element - */
 function createSvgElement(n, v) {
   n = document.createElementNS("http://www.w3.org/2000/svg", n);
   for (let p in v)
