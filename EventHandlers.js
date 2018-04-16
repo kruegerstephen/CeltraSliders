@@ -42,10 +42,10 @@
                 let radian = Math.atan2(y, x);
                 let angle = radian*180/Math.PI;
                 let stepAngle = getStepAngle(sliderCircle.sCircle, angle);
-                  
+                  console.log(angle);
                 drawPath(sliderCircle, stepAngle);
                 moveKnob(sliderCircle, stepAngle);
-                valueConversion(sliderCircle, stepAngle);
+                valueConversion(sliderCircle, stepAngle, angle);
 
               }
             

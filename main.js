@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function(){
         color: "#FC4346",
         maxVal: 100,
         minVal: 10,
-        step: 1,      
+        step: 7,      
         radius: 100,
         strokewidth: 30,
         smoothscroll : false,
