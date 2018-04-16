@@ -63,11 +63,23 @@ document.addEventListener('DOMContentLoaded', function(){
     
     
     
-    CreateCircle(options);
-    CreateCircle(options2);
-    CreateCircle(options3);
-    CreateCircle(options4);
-    CreateCircle(options5);
+    CreateCircle();
+    CreateCircle();
+    CreateCircle();
+    CreateCircle();
+    CreateCircle();   
+    CreateCircle();
+    CreateCircle();
+    CreateCircle();
+    CreateCircle();
+    CreateCircle();
+    CreateCircle();
+    CreateCircle();
+    CreateCircle();
+
+
+
+
 
 }, false);
 

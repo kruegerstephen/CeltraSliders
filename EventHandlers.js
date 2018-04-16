@@ -1,6 +1,5 @@
     let allowMove = false;
 
-    /*monitors what knob was clicked to start drag*/
     function start(e){
       moveThisKnob = this;
       allowMove = true;
@@ -8,39 +7,17 @@
 
     function move(e){
         e.preventDefault();
-              if(allowMove || e.type == "click"){                       
-
-                  let containerCenterW = container.clientWidth/2;
-                  let slilderCircle;
+              if(allowMove || e.type === "click")
+              {                       
+                  
+                if(e.type==="click"){ allowMove = false };
+                                  
+                let sliderCircle = getCircle(this, e.type);
                 
-                  let y,x;
-
-                  if(e.type == "mousemove")
-                  {
-                     y = containerCenterW- e.offsetY;
-                     x = e.offsetX - containerCenterW; 
-                     sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
-  
-                  }else if(e.type == "click"){
-                      allowMove = false;
-                      y = containerCenterW- e.offsetY;
-                      x = e.offsetX - containerCenterW;
-                      if(this.nodeName === "path"){
-                        sliderCircle = getSliderPartsByID(this.attributes.pathID.value);
-                      }else{
-                        sliderCircle = getSliderPartsByID(this.id);
-                      }
-                  }
-                  else if(e.type == "touchmove"){
-                     y = container.getBoundingClientRect().top + document.documentElement.scrollTop + containerCenterW - e.touches[0].pageY;
-                     x = e.touches[0].pageX - container.getBoundingClientRect().left + document.documentElement.scrollLeft - containerCenterW;
-                     sliderCircle = getSliderPartsByID(moveThisKnob.attributes.pID.value);
-                      console.log(x,y);
-  
-                  }
-
-                let radian = Math.atan2(y, x);
+                let offset = getEventXYCoord(e);
+                let radian = Math.atan2(offset.y, offset.x);
                 let angle = radian*180/Math.PI;
+                console.log(offset.y, offset.x);
                 let stepAngle = getStepAngle(sliderCircle.sCircle, angle);
 
                   
@@ -51,6 +28,67 @@
               }
             
      }
+
+    function getCircle(clickedElement, eventType){
+        
+          if(eventType != "click"){
+             if(moveThisKnob != undefined){     
+                return getSliderPartsByID(moveThisKnob.attributes.pID.value);
+             }
+          }else if(clickedElement.nodeName === "path"){
+
+              return getSliderPartsByID(clickedElement.attributes.pathID.value);
+
+          }else if (clickedElement.nodeName === "circle"){
+
+              return getSliderPartsByID(clickedElement.id);
+          }
+    }
+
+
+    function getEventXYCoord(e){
+        
+        let globalPointsFlag = false;
+        let containerCenterW;
+        
+        /*hack for firefox - expensive call so will only use when necessary*/
+        if(container.clientWidth === 0){
+            globalPointsFlag = true;
+            var globalPoint = getGlobalPoint(e);
+            containerWidth = container.attributes.width.value/2;
+        }else{
+            containerCenterW = container.clientWidth/2;
+        }
+
+        /*essentially: if (firefox) else if(other browsers) else if (mobile)*/
+        if((e.type === "mousemove" || e.type ==="click") && globalPointsFlag)
+          {
+             return {
+                 y : containerWidth - globalPoint.y,
+                 x : globalPoint.x - containerWidth, 
+             }
+
+          }else if((e.type === "click" || e.type ==="mousemove") && !globalPointsFlag){
+              return{
+                  y : containerCenterW- e.offsetY,
+                  x : e.offsetX - containerCenterW,
+              } 
+          }
+          else if(e.type === "touchmove"){
+              /*calculates offset of SVG for correct touch angles*/
+            return{
+                y : container.getBoundingClientRect().top + document.documentElement.scrollTop + containerCenterW - e.touches[0].pageY,
+                x : e.touches[0].pageX - container.getBoundingClientRect().left + document.documentElement.scrollLeft - containerCenterW,
+            }            
+          }
+    }
+
+    function getGlobalPoint(e){
+         var pt = container.createSVGPoint();
+            pt.x = e.clientX;
+            pt.y = e.clientY;
+         return pt.matrixTransform(container.getScreenCTM().inverse());
+    }
 
     function end(e){
       allowMove = false;

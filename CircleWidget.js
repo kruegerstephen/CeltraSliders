@@ -79,7 +79,7 @@ CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
         
              
         container.addEventListener("mouseup", end);
-        container.addEventListener("mousemove", move);
+        container.addEventListener("mousemove", move, false);
     
         this.slider.addEventListener("click", move);
         this.slider.addEventListener("touchenter", move);   
@@ -131,11 +131,10 @@ function moveKnob(fullSlider, stepAngle){
     let radius = fullSlider.sCircle.r.baseVal.value;
     let centerX = fullSlider.sCircle.cx.baseVal.value;
     
-    let radian = toRadian(stepAngle);
+    let stepAngleRad = toRadian(stepAngle);
     
-    //gets new x,y coordinates for the knob based on the stepAngle
-    let newY = -Math.round(Math.sin(radian)*radius) + centerX;
-    let newX = Math.round(Math.cos(radian)*radius)+ centerX;
+    let newY = -Math.round(Math.sin(stepAngleRad)*radius) + centerX;
+    let newX = Math.round(Math.cos(stepAngleRad)*radius)+ centerX;
     
     fullSlider.sKnob.cx.baseVal.value = newX;
     fullSlider.sKnob.cy.baseVal.value = newY;

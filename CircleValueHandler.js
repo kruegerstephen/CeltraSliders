@@ -10,7 +10,6 @@ function valueConversion(fullSlider, stepAngle, angle){
     let floorVal = stepVal- Math.abs((stepVal)-Math.floor(value/step)*step);
     let ceilVal =  stepVal - Math.abs((stepVal)-Math.ceil(value/step)*step);
     let unrounded = stepVal - Math.abs((stepVal)-(value/step)*step);
-    console.log(value)
     if(-175 >= angle && angle >= -179 && value<=stepVal)
   {
         value = maxVal;
