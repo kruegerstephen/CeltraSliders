@@ -21,7 +21,7 @@ function CircleWidget(options){
             defaultFlag = true;
         }
     
-        this.name   = defaultFlag ? "circle"    : options.name
+        this.name   = defaultFlag ? "circle"    : options.name;
         this.color  = defaultFlag ? "blue"  : options.color;
         this.maxVal = defaultFlag ? 100     : options.maxVal;
         this.minVal = defaultFlag ? 0       : options.minVal;
@@ -29,7 +29,7 @@ function CircleWidget(options){
         this.strokewidth = defaultFlag ? 30 : options.strokewidth;
         this.smoothscroll  = defaultFlag ? false  : options.smoothscroll;
         this.radius = defaultFlag ? circleRadiusSpacer() : options.radius;
-        console.log(this.radius)
+
         this.id = "circ" + getAllCircles().length.toString(); 
         this.startAngle = -90*Math.PI/180;
         this.cx = container.clientWidth/2;
@@ -53,7 +53,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                                     strokeColor: this.color,
                                                     startAngle : this.startAngle,
                                                     smoothscroll : this.smoothscroll,
-                                                    "stroke-opacity" : .4,
+                                                    "stroke-opacity" : 0.4,
                                                     "stroke-width": this.strokewidth
                                                     });
        
@@ -166,7 +166,7 @@ function drawPath(fullSlider, angle){
      let path = createSvgElement("path", {  pathID : circle.id,
                                 fill : "none",
                                 stroke : circle.attributes.strokeColor.value,
-                                "stroke-opacity" : .8,
+                                "stroke-opacity" : 0.8,
                                 "stroke-width":strokewidth,
                                 d:generateArc(circle, Math.abs(angle-180))});
 
@@ -174,7 +174,7 @@ function drawPath(fullSlider, angle){
     path.addEventListener("click", move, false);
 
     
-    if(currPath != undefined ){
+    if(currPath !== undefined ){
         container.replaceChild(path, currPath);
     }else{
         circle.firstMove = true;
@@ -186,7 +186,7 @@ function getKnobPosition(angle, radius, centerContainer){
     return{
         knobX: Math.round(Math.sin(angle)*radius) + centerContainer,
         knobY: Math.round(Math.cos(angle)*radius)+ centerContainer
-    }
+    };
     
 }
 
