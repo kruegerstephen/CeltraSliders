@@ -33,8 +33,6 @@ Set up your options object and call CreateCircle(options), passing the options i
 
 You can create multiple sliders in the same container, just make sure they have the same container value. 
 
-**Working on a solution for multiple containers
-
 The folder CircleSlider just contains all the code in the CircleSliderWidgetDist.js file but split up 
 so it is easier to work on.  
 
@@ -49,5 +47,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Joe's getNode (createSVGElement) function proved incredibly useful https://stackoverflow.com/users/4696005/joseph-merdrignac
+* Joe's getNode (createSVGElement) function proved incredibly useful https://stackoverflow.com/questions/20539196/creating-svg-elements-dynamically-with-javascript-inside-html/37411738#37411738
 
