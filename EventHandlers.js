@@ -52,12 +52,12 @@
         let containerCenterW;
         
         /*hack for firefox - expensive call so will only use when necessary*/
-        if(container.clientWidth === 0){
+        if(SVG.clientWidth === 0){
             globalPointsFlag = true;
             var globalPoint = getGlobalPoint(e);
-            containerWidth = container.attributes.width.value/2;
+            containerWidth = SVG.attributes.width.value/2;
         }else{
-            containerCenterW = container.clientWidth/2;
+            containerCenterW = SVG.clientWidth/2;
         }
 
         /*essentially: if (firefox) else if(other browsers) else if (mobile)*/
@@ -77,17 +77,17 @@
           else if(e.type === "touchmove"){
               /*calculates offset of SVG for correct touch angles*/
             return{
-                y : container.getBoundingClientRect().top + document.documentElement.scrollTop + containerCenterW - e.touches[0].pageY,
-                x : e.touches[0].pageX - container.getBoundingClientRect().left + document.documentElement.scrollLeft - containerCenterW,
+                y : SVG.getBoundingClientRect().top + document.documentElement.scrollTop + containerCenterW - e.touches[0].pageY,
+                x : e.touches[0].pageX - SVG.getBoundingClientRect().left + document.documentElement.scrollLeft - containerCenterW,
             }            
           }
     }
 
     function getGlobalPoint(e){
-         var pt = container.createSVGPoint();
+         var pt = SVG.createSVGPoint();
             pt.x = e.clientX;
             pt.y = e.clientY;
-         return pt.matrixTransform(container.getScreenCTM().inverse());
+         return pt.matrixTransform(SVG.getScreenCTM().inverse());
     }
 
     function end(e){

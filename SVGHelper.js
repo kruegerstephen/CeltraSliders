@@ -1,5 +1,5 @@
 function getAllSVGElements(){
-     return Array.from(container.childNodes);
+     return Array.from(SVG.childNodes);
 };
 
 function getAllCircles(){
@@ -32,6 +32,7 @@ function getSliderPartsByID(id){
 }
 
 
+
 function createSvgElement(n, v) {
   n = document.createElementNS("http://www.w3.org/2000/svg", n);
   for (let p in v)
@@ -43,12 +44,12 @@ function createSvgElement(n, v) {
 /*resizes the svg to fit the current circle*/ 
 function resizeSVG(circle){
 
-    container.width.baseVal.value = circle.radius*2.75;
-    container.height.baseVal.value = circle.radius*2.75;
+    SVG.width.baseVal.value = circle.radius*2.75;
+    SVG.height.baseVal.value = circle.radius*2.75;
     let viewBoxString = "0 0 " + circle.radius*2.75 + " " + circle.radius*2.75;
-    container.setAttribute("viewBox", viewBoxString)
+    SVG.setAttribute("viewBox", viewBoxString)
 
-    let centerContainer = container.width.baseVal.value/2;
+    let centerContainer = SVG.width.baseVal.value/2;
 
     let allCircles = getAllCircles();
 

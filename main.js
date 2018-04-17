@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', function(){ 
-
-    const container = createSVG();
-    document.getElementById('spinners').appendChild(container);
     
     let options =  {
         color: "#FC4346",
         maxVal: 100,
+        container:"spinners",
         minVal: 10,
         step: 7,      
         radius: 100,
@@ -22,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function(){
         radius: 150,
         strokewidth: 30,
         smoothscroll : true,
+        container:"spinners",
         name : "Food"
     };    
     
@@ -31,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function(){
         minVal: 4,
         step: 2,      
         radius: 200,
+        container:"spinners",
         strokewidth: 30,
         smoothscroll : false,
         name : "Insurance"
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function(){
         minVal: 50,
         step: 5,      
         radius: 250,
+        container:"spinners",
         strokewidth: 30,
         smoothscroll : true,
         name : "Entertainment"
@@ -53,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function(){
         color: "#5F3A6F",
         maxVal: 300,
         minVal: 50,
+        container:"spinners",
         step: 5,      
         radius: 300,
         strokewidth: 30,
@@ -63,38 +65,17 @@ document.addEventListener('DOMContentLoaded', function(){
     
     
     
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();   
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-    CreateCircle();
-
-
-
-
+    CreateCircle(options);
+    CreateCircle(options2);
+    CreateCircle(options3);
+    CreateCircle(options4);
+    CreateCircle(options5);
 
 }, false);
 
 
 
 
-function createSVG(){
-    return createSvgElement("svg", {
-                            id:"container",
-                            preserveAspectRatio: "xMidYMid slice",
-                            viewBox: "1 1 1500 1500",
-                            width: "100",
-                            height: "100"
-                          })
-    
-}
+
 
 

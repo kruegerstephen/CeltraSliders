@@ -1,14 +1,23 @@
+let SVG = createSVG();    
+
 
 function CreateCircle(options){
     
     let circle = new CircleWidget(options);
+    
     circle.DrawCircle();
     circle.CreateKnob();
     circle.AddEventHandlers();
     circle.CreateDisplayField();  
     
+    if(document.getElementById(circle.container) === undefined){        
+        document.body.appendChild(SVG);
+    }else{
+        document.getElementById(circle.container).appendChild(SVG);
+    }
+    
     //Resize the SVG if the circle will be out of the viewbox
-    if(container.clientWidth <= circle.radius*2.75 || container.clientHeight <= circle.radius*2.75){
+    if(SVG.clientWidth <= circle.radius*2.75 || SVG.clientHeight <= circle.radius*2.75){
        resizeSVG(circle);
     }
 }
@@ -20,24 +29,29 @@ function CircleWidget(options){
         if(options === undefined){
             defaultFlag = true;
         }
-    
+        
         this.name   = defaultFlag ? "circle": options.name;
         this.color  = defaultFlag ? "blue"  : options.color;
         this.maxVal = defaultFlag ? 100     : options.maxVal;
         this.minVal = defaultFlag ? 0       : options.minVal;
         this.step   = defaultFlag ? 1       : options.step;
+        this.container = defaultFlag ? "spinners" : options.container,
         this.strokewidth = defaultFlag ? 30 : options.strokewidth;
         this.smoothscroll  = defaultFlag ? false  : options.smoothscroll;
         this.radius = defaultFlag ? circleRadiusSpacer() : options.radius;
 
         this.id = "circ" + getAllCircles().length.toString(); 
         this.startAngle = toRadian(-90);
-        this.cx = container.clientWidth/2;
-        this.cy = container.clientWidth/2;
+        this.cx = SVG.clientWidth/2;
+        this.cy = SVG.clientWidth/2;
 }
+
 
 CircleWidget.prototype.DrawCircle = function drawCircle(){
 
+        if(this.minVal >= this.maxVal){
+            this.maxVal = this.minVal + this.maxVal*2;
+        }
 
        this.slider = createSvgElement("circle", {   id : this.id,
                                                     cx : this.cx,
@@ -49,6 +63,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                                     maxVal : this.maxVal,
                                                     minVal : this.minVal,
                                                     stroke : "grey",
+                                                    container : this.container,
                                                     strokeColor: this.color,
                                                     startAngle : this.startAngle,
                                                     smoothscroll : this.smoothscroll,
@@ -56,7 +71,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
                                                     "stroke-width": this.strokewidth
                                                     });
        
-        container.appendChild(this.slider);
+        SVG.appendChild(this.slider);
      
 };
 
@@ -72,14 +87,14 @@ CircleWidget.prototype.CreateKnob = function CreateKnob(){
                                                fill : "#EDEEEE",
                                                stroke : "none"});
     
-    container.appendChild(this.knob);
+    SVG.appendChild(this.knob);
 }
 
 CircleWidget.prototype.AddEventHandlers =  function AddEventHandlers(){
         
              
-        container.addEventListener("mouseup", end);
-        container.addEventListener("mousemove", move, false);
+        SVG.addEventListener("mouseup", end);
+        SVG.addEventListener("mousemove", move, false);
     
         this.slider.addEventListener("click", move);
         this.slider.addEventListener("touchenter", move);   
@@ -140,19 +155,18 @@ function moveKnob(fullSlider, stepAngle){
     fullSlider.sKnob.cy.baseVal.value = newY;
     
     //moves knob to bottom of dom, which keeps it on top of all other elements
-    container.appendChild(fullSlider.sKnob);
+    SVG.appendChild(fullSlider.sKnob);
 }
 
 
 
-/*Calculates the angle of each step around the circle*/
 function getStepAngle(circle, angle){
      
     let numSteps = ((circle.attributes.maxVal.value-circle.attributes.minVal.value)/circle.attributes.step.value);
     
     let stepAngle;
     
-    if(circle.attributes.smoothscroll.value.toLowerCase() == "true"){
+    if(circle.attributes.smoothscroll.value.toLowerCase() === "true"){
          stepAngle = (angle/(360/numSteps) * (360/numSteps)); 
     }else{
          stepAngle = Math.round((angle/(360/numSteps))) * (360/numSteps); 
@@ -166,7 +180,7 @@ function drawPath(fullSlider, angle){
          
      let circle = fullSlider.sCircle;  
      let strokewidth = circle.attributes["stroke-width"].value;
-     let currPath = getAllPaths().filter(child => child.attributes.pathID.value == circle.id)[0]; 
+     let currPath = getAllPaths().filter(child => child.attributes.pathID.value === circle.id)[0]; 
 
      let path = createSvgElement("path", {  pathID : circle.id,
                                 fill : "none",
@@ -180,17 +194,17 @@ function drawPath(fullSlider, angle){
 
     
     if(currPath !== undefined ){
-        container.replaceChild(path, currPath);
+        SVG.replaceChild(path, currPath);
     }else{
         circle.firstMove = true;
-        container.appendChild(path);
+        SVG.appendChild(path);
     }
 }
 
-function getKnobPosition(angle, radius, centerContainer){
+function getKnobPosition(angle, radius, centerSVG){
     return{
-        knobX: Math.round(Math.sin(angle)*radius) + centerContainer,
-        knobY: Math.round(Math.cos(angle)*radius)+ centerContainer
+        knobX: Math.round(Math.sin(angle)*radius) + centerSVG,
+        knobY: Math.round(Math.cos(angle)*radius)+ centerSVG
     };
     
 }
@@ -218,6 +232,18 @@ function generateArc(circle, endAngle){
         "M", end.x, end.y, 
         "A", radius, radius, 0, largeArcFlag, 0, start.x, start.y
     ].join(" ");
+}
+
+
+function createSVG(svgID){
+    return createSvgElement("svg", {
+                            id:svgID,
+                            preserveAspectRatio: "xMidYMid slice",
+                            viewBox: "1 1 1500 1500",
+                            width: "100",
+                            height: "100"
+                          })
+    
 }
 
 

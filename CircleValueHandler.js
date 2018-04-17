@@ -1,37 +1,44 @@
 function valueConversion(fullSlider, stepAngle, angle){
     
-    circle = fullSlider.sCircle;
+    let circle = fullSlider.sCircle;
+    let maxAngle = -179;
+
     let maxVal = parseInt(circle.attributes.maxVal.value);
     let minVal = parseInt(circle.attributes.minVal.value);
-    let stepVal = maxVal-minVal;
     let step = parseInt(circle.attributes.step.value);
+
+    let stepVal = maxVal-minVal;
+    
     let value = ((stepAngle+180)/360) * stepVal;
     value = Math.abs((stepVal)-Math.floor(value/step)*step);
     let floorVal = stepVal- Math.abs((stepVal)-Math.floor(value/step)*step);
-    let ceilVal =  stepVal - Math.abs((stepVal)-Math.ceil(value/step)*step);
-    let unrounded = stepVal - Math.abs((stepVal)-(value/step)*step);
-    if(-175 >= angle && angle >= -179 && value<=stepVal)
-  {
-        value = maxVal;
-        moveKnob(fullSlider, -179);
-        drawPath(fullSlider, -179);
-   } else if(value + minVal == step && minVal < step){
-       value = minVal;
-   }else if(value + minVal == maxVal && 0 ===(stepAngle+180)/360){
-       value = maxVal;
-       moveKnob(fullSlider, -179);
-       drawPath(fullSlider, -179);
-   }
-    else{
-        if(value<step){
-            value = minVal;
-        }else{
-            value = minVal + floorVal;
+
+    /*handling value edge cases for stepping*/
+    if(maxAngle+4 >= angle && angle >= maxAngle && value<=stepVal){
+            value = maxVal;
+            moveToMax(fullSlider, maxAngle);
+       }else if(value + minVal == step && minVal < step){
+           value = minVal;
+       }else if(value + minVal == maxVal && 0 === (stepAngle+180)/360){
+           value = maxVal;
+           moveToMax(fullSlider, maxAngle);
+       }
+        else{
+            if(value<step){
+                value = minVal;
+            }else{
+                value = minVal + floorVal;
+            }
         }
-    }
     
 
     displayValue(circle, value);
+}
+
+
+function moveToMax(slider, maxAngle){
+    moveKnob(slider, maxAngle);
+    drawPath(slider, maxAngle)
 }
 
 function displayValue(circle, value){
