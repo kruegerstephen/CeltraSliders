@@ -49,10 +49,6 @@ function CircleWidget(options){
 
 CircleWidget.prototype.DrawCircle = function drawCircle(){
 
-        if(this.minVal >= this.maxVal){
-            this.maxVal = this.minVal + this.maxVal*2;
-        }
-
        this.slider = createSvgElement("circle", {   id : this.id,
                                                     cx : this.cx,
                                                     cy : this.cy,
@@ -154,7 +150,7 @@ function moveKnob(fullSlider, stepAngle){
     fullSlider.sKnob.cx.baseVal.value = newX;
     fullSlider.sKnob.cy.baseVal.value = newY;
     
-    //moves knob to bottom of dom, which keeps it on top of all other elements
+    //moves knob to top of svg, which keeps it on top of all other elements
     SVG.appendChild(fullSlider.sKnob);
 }
 
@@ -247,7 +243,6 @@ function createSVG(svgID){
 }
 
 
-/*auto calculates radius of default circles*/
 function circleRadiusSpacer(){    
     return 50 + ((getAllCircles().length)+1) * 50;
 }

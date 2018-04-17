@@ -1,6 +1,7 @@
 let SVG = createSVG();
 
-function CreateCircle(options){
+
+function CreateCircle(options) {
 
     let circle = new CircleWidget(options);
 
@@ -9,32 +10,31 @@ function CreateCircle(options){
     circle.AddEventHandlers();
     circle.CreateDisplayField();
 
-    
-    if (document.getElementById(circle.container) === undefined){
+    if (document.getElementById(circle.container) === undefined) {
         document.body.appendChild(SVG);
     } else {
         document.getElementById(circle.container).appendChild(SVG);
     }
 
     //Resize the SVG if the circle will be out of the viewbox
-    if (SVG.clientWidth <= circle.radius * 2.75 || SVG.clientHeight <= circle.radius * 2.75){
+    if (SVG.clientWidth <= circle.radius * 2.75 || SVG.clientHeight <= circle.radius * 2.75) {
         resizeSVG(circle);
     }
 }
 
 
-function CircleWidget(options){
+function CircleWidget(options) {
 
     let defaultFlag = false;
-    if (options === undefined){
+    if (options === undefined) {
         defaultFlag = true;
     }
 
-    this.name   = defaultFlag ? "circle": options.name;
-    this.color  = defaultFlag ? "blue"  : options.color;
-    this.maxVal = defaultFlag ? 100     : options.maxVal;
-    this.minVal = defaultFlag ? 0       : options.minVal;
-    this.step   = defaultFlag ? 1       : options.step;
+    this.name = defaultFlag   ? "circle" : options.name;
+    this.color = defaultFlag  ? "blue" : options.color;
+    this.maxVal = defaultFlag ? 100 : options.maxVal;
+    this.minVal = defaultFlag ? 0 : options.minVal;
+    this.step = defaultFlag   ? 1 : options.step;
     this.container = defaultFlag ? "spinners" : options.container,
     this.strokewidth = defaultFlag ? 30 : options.strokewidth;
     this.smoothscroll = defaultFlag ? false : options.smoothscroll;
@@ -47,7 +47,7 @@ function CircleWidget(options){
 }
 
 
-CircleWidget.prototype.DrawCircle = function drawCircle(){
+CircleWidget.prototype.DrawCircle = function drawCircle() {
 
     this.slider = createSvgElement("circle", {
         id: this.id,
@@ -73,7 +73,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle(){
 };
 
 
-CircleWidget.prototype.CreateKnob = function CreateKnob(){
+CircleWidget.prototype.CreateKnob = function CreateKnob() {
 
     let knobXY = getKnobPosition(this.startAngle, this.radius, this.cx);
 
@@ -89,7 +89,7 @@ CircleWidget.prototype.CreateKnob = function CreateKnob(){
     SVG.appendChild(this.knob);
 }
 
-CircleWidget.prototype.AddEventHandlers = function AddEventHandlers(){
+CircleWidget.prototype.AddEventHandlers = function AddEventHandlers() {
 
 
     SVG.addEventListener("mouseup", end);
@@ -107,7 +107,7 @@ CircleWidget.prototype.AddEventHandlers = function AddEventHandlers(){
 
 
 /*Creates the display boxes that show circle name, value, and color of the slider*/
-CircleWidget.prototype.CreateDisplayField = function CreateDisplayField(){
+CircleWidget.prototype.CreateDisplayField = function CreateDisplayField() {
 
     let valBox = document.createElement('div');
     let valBoxName = document.createElement('div');
@@ -140,7 +140,7 @@ CircleWidget.prototype.CreateDisplayField = function CreateDisplayField(){
 
 /*takes the knobs current angle and increases it by 
 the angle of one step.*/
-function moveKnob(fullSlider, stepAngle){
+function moveKnob(fullSlider, stepAngle) {
 
     let radius = fullSlider.sCircle.r.baseVal.value;
     let centerX = fullSlider.sCircle.cx.baseVal.value;
@@ -153,19 +153,19 @@ function moveKnob(fullSlider, stepAngle){
     fullSlider.sKnob.cx.baseVal.value = newX;
     fullSlider.sKnob.cy.baseVal.value = newY;
 
-    //moves knob to bottom of dom, which keeps it on top of all other elements
+    //moves knob to top of svg, which keeps it on top of all other elements
     SVG.appendChild(fullSlider.sKnob);
 }
 
 
 
-function getStepAngle(circle, angle){
+function getStepAngle(circle, angle) {
 
     let numSteps = ((circle.attributes.maxVal.value - circle.attributes.minVal.value) / circle.attributes.step.value);
 
     let stepAngle;
 
-    if (circle.attributes.smoothscroll.value.toLowerCase() === "true"){
+    if (circle.attributes.smoothscroll.value.toLowerCase() === "true") {
         stepAngle = (angle / (360 / numSteps) * (360 / numSteps));
     } else {
         stepAngle = Math.round((angle / (360 / numSteps))) * (360 / numSteps);
@@ -175,7 +175,7 @@ function getStepAngle(circle, angle){
 }
 
 
-function drawPath(fullSlider, angle){
+function drawPath(fullSlider, angle) {
 
     let circle = fullSlider.sCircle;
     let strokewidth = circle.attributes["stroke-width"].value;
@@ -194,7 +194,7 @@ function drawPath(fullSlider, angle){
     path.addEventListener("click", move, false);
 
 
-    if (currPath !== undefined){
+    if (currPath !== undefined) {
         SVG.replaceChild(path, currPath);
     } else {
         circle.firstMove = true;
@@ -202,7 +202,7 @@ function drawPath(fullSlider, angle){
     }
 }
 
-function getKnobPosition(angle, radius, centerSVG){
+function getKnobPosition(angle, radius, centerSVG) {
     return {
         knobX: Math.round(Math.sin(angle) * radius) + centerSVG,
         knobY: Math.round(Math.cos(angle) * radius) + centerSVG
@@ -210,7 +210,7 @@ function getKnobPosition(angle, radius, centerSVG){
 
 }
 
-function findPathXY(centerX, centerY, radius, angle){
+function findPathXY(centerX, centerY, radius, angle) {
     let radians = toRadian(angle - 180);
     return {
         x: centerX + (radius * Math.cos(radians)),
@@ -218,7 +218,7 @@ function findPathXY(centerX, centerY, radius, angle){
     };
 }
 
-function generateArc(circle, endAngle){
+function generateArc(circle, endAngle) {
 
     let radius = circle.r.baseVal.value;
     let centerX = circle.cx.baseVal.value;
@@ -236,10 +236,30 @@ function generateArc(circle, endAngle){
 }
 
 
+function createSVG(svgID) {
+    return createSvgElement("svg", {
+        id: svgID,
+        preserveAspectRatio: "xMidYMid slice",
+        viewBox: "1 1 1500 1500",
+        width: "100",
+        height: "100"
+    })
+
+}
+
+
+function circleRadiusSpacer() {
+    return 50 + ((getAllCircles().length) + 1) * 50;
+}
+
+let toRadian = (angle) => angle * Math.PI / 180;
+
+
 
 
 /*------------------------Value Handler---------------------------*/
-function valueConversion(fullSlider, stepAngle, angle){
+
+function valueConversion(fullSlider, stepAngle, angle) {
 
     let circle = fullSlider.sCircle;
     let maxAngle = -179;
@@ -255,16 +275,16 @@ function valueConversion(fullSlider, stepAngle, angle){
     let floorVal = stepVal - Math.abs((stepVal) - Math.floor(value / step) * step);
 
     /*handling value edge cases for stepping*/
-    if (maxAngle + 4 >= angle && angle >= maxAngle && value <= stepVal){
+    if (maxAngle + 4 >= angle && angle >= maxAngle && value <= stepVal) {
         value = maxVal;
         moveToMax(fullSlider, maxAngle);
-    } else if (value + minVal == step && minVal < step){
+    } else if (value + minVal == step && minVal < step) {
         value = minVal;
-    } else if (value + minVal == maxVal && 0 === (stepAngle + 180) / 360){
+    } else if (value + minVal == maxVal && 0 === (stepAngle + 180) / 360) {
         value = maxVal;
         moveToMax(fullSlider, maxAngle);
     } else {
-        if (value < step){
+        if (value < step) {
             value = minVal;
         } else {
             value = minVal + floorVal;
@@ -276,12 +296,12 @@ function valueConversion(fullSlider, stepAngle, angle){
 }
 
 
-function moveToMax(slider, maxAngle){
+function moveToMax(slider, maxAngle) {
     moveKnob(slider, maxAngle);
     drawPath(slider, maxAngle)
 }
 
-function displayValue(circle, value){
+function displayValue(circle, value) {
     let circleDisplayID = circle.id + "valueDisp";
     let dispDIV = document.getElementById(circleDisplayID);
     dispDIV.innerHTML = value;
@@ -293,16 +313,20 @@ function displayValue(circle, value){
 
 let allowMove = false;
 
-function start(e){
+function start(e) {
     moveThisKnob = this;
     allowMove = true;
 }
 
-function move(e){
-    e.preventDefault();
-    if (allowMove || e.type === "click"){
+function end(e) {
+    allowMove = false;
+}
 
-        if (e.type === "click"){
+function move(e) {
+    e.preventDefault();
+    if (allowMove || e.type === "click") {
+
+        if (e.type === "click") {
             allowMove = false
         };
 
@@ -311,7 +335,6 @@ function move(e){
         let offset = getEventXYCoord(e);
         let radian = Math.atan2(offset.y, offset.x);
         let angle = radian * 180 / Math.PI;
-        console.log(offset.y, offset.x);
         let stepAngle = getStepAngle(sliderCircle.sCircle, angle);
 
 
@@ -323,30 +346,30 @@ function move(e){
 
 }
 
-function getCircle(clickedElement, eventType){
+function getCircle(clickedElement, eventType) {
 
-    if (eventType != "click"){
-        if (moveThisKnob != undefined){
+    if (eventType != "click") {
+        if (moveThisKnob != undefined) {
             return getSliderPartsByID(moveThisKnob.attributes.pID.value);
         }
-    } else if (clickedElement.nodeName === "path"){
+    } else if (clickedElement.nodeName === "path") {
 
         return getSliderPartsByID(clickedElement.attributes.pathID.value);
 
-    } else if (clickedElement.nodeName === "circle"){
+    } else if (clickedElement.nodeName === "circle") {
 
         return getSliderPartsByID(clickedElement.id);
     }
 }
 
 
-function getEventXYCoord(e){
+function getEventXYCoord(e) {
 
     let globalPointsFlag = false;
     let containerCenterW;
 
     /*hack for firefox - expensive call so will only use when necessary*/
-    if (SVG.clientWidth === 0){
+    if (SVG.clientWidth === 0) {
         globalPointsFlag = true;
         var globalPoint = getGlobalPoint(e);
         containerWidth = SVG.attributes.width.value / 2;
@@ -355,18 +378,18 @@ function getEventXYCoord(e){
     }
 
     /*essentially: if (firefox) else if(other browsers) else if (mobile)*/
-    if ((e.type === "mousemove" || e.type === "click") && globalPointsFlag){
+    if ((e.type === "mousemove" || e.type === "click") && globalPointsFlag) {
         return {
             y: containerWidth - globalPoint.y,
             x: globalPoint.x - containerWidth,
         }
 
-    } else if ((e.type === "click" || e.type === "mousemove") && !globalPointsFlag){
+    } else if ((e.type === "click" || e.type === "mousemove") && !globalPointsFlag) {
         return {
             y: containerCenterW - e.offsetY,
             x: e.offsetX - containerCenterW,
         }
-    } else if (e.type === "touchmove"){
+    } else if (e.type === "touchmove") {
         /*calculates offset of SVG for correct touch angles*/
         return {
             y: SVG.getBoundingClientRect().top + document.documentElement.scrollTop + containerCenterW - e.touches[0].pageY,
@@ -375,42 +398,52 @@ function getEventXYCoord(e){
     }
 }
 
-function getGlobalPoint(e){
+function getGlobalPoint(e) {
     var pt = SVG.createSVGPoint();
     pt.x = e.clientX;
     pt.y = e.clientY;
     return pt.matrixTransform(SVG.getScreenCTM().inverse());
 }
 
-function end(e){
-    allowMove = false;
+
+
+
+/*------------------------SVG HELPERS---------------------------*/
+
+function createSVG(svgID) {
+    return createSvgElement("svg", {
+        id: svgID,
+        preserveAspectRatio: "xMidYMid slice",
+        viewBox: "1 1 1500 1500",
+        width: "100",
+        height: "100"
+    })
 
 }
 
 
-/*------------------------SVG HELPERS---------------------------*/
-function getAllSVGElements(){
+function getAllSVGElements() {
     return Array.from(SVG.childNodes);
 };
 
-function getAllCircles(){
+function getAllCircles() {
     return getAllSVGElements.call().filter(child => child.nodeName == "circle" && child.attributes.pID == undefined);
 };
 
-function getAllKnobs(){
+function getAllKnobs() {
     return getAllSVGElements.call().filter(child => child.attributes.pID != undefined);
 };
 
-function getAllPaths(){
+function getAllPaths() {
     return getAllSVGElements.call().filter(child => child.nodeName == "path");
 };
 
-function getPathById(id){
+function getPathById(id) {
     getAllPaths.call().filter(child => child.attributes.pathID.value == id)[0];
 }
 
 
-function getSliderPartsByID(id){
+function getSliderPartsByID(id) {
 
     let sliderCircle = getAllCircles.call().filter(child => child.id == id && child.attributes.pID == undefined)[0];
     let sliderKnob = getAllKnobs.call().filter(child => child.attributes.pID.value == id)[0];
@@ -424,7 +457,7 @@ function getSliderPartsByID(id){
 
 
 
-function createSvgElement(n, v){
+function createSvgElement(n, v) {
     n = document.createElementNS("http://www.w3.org/2000/svg", n);
     for (let p in v)
         n.setAttributeNS(null, p, v[p]);
@@ -432,8 +465,7 @@ function createSvgElement(n, v){
 };
 
 
-/*resizes the svg to fit the current circle*/
-function resizeSVG(circle){
+function resizeSVG(circle) {
 
     SVG.width.baseVal.value = circle.radius * 2.75;
     SVG.height.baseVal.value = circle.radius * 2.75;
@@ -444,7 +476,7 @@ function resizeSVG(circle){
 
     let allCircles = getAllCircles();
 
-    for (let currCircle of allCircles){
+    for (let currCircle of allCircles) {
 
         let slider = getSliderPartsByID(currCircle.id);
 
@@ -460,21 +492,3 @@ function resizeSVG(circle){
 }
 
 
-function createSVG(svgID){
-    return createSvgElement("svg", {
-        id: svgID,
-        preserveAspectRatio: "xMidYMid slice",
-        viewBox: "1 1 1500 1500",
-        width: "100",
-        height: "100"
-    })
-
-}
-
-
-/*auto calculates radius of default circles*/
-function circleRadiusSpacer(){
-    return 50 + ((getAllCircles().length) + 1) * 50;
-}
-
-const toRadian = (angle) => angle * Math.PI / 180;
