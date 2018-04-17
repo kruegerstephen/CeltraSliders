@@ -1,7 +1,7 @@
 # Circular Sliders 
 
 This is a circular slider class written in vanilla javascript. It draws the sliders as SVG elements and accepts a list of options including step, color, max/min value, and container. 
-Check out the demo here [Demo](https://kruegerstephen.github.io/CeltraSliders/)
+Check out the demo [here](https://kruegerstephen.github.io/CeltraSliders/)
 
 ## Getting Started
 
@@ -30,11 +30,14 @@ Set up your options object and call CreateCircle(options), passing the options i
     CreateCircle(options)
 ```
 
+Some of the less obvious options:
+      smoothscroll - Will smoothly scroll around the circle instead of stepping by angle. The value will still step. Off by default.
+      name - Name that will be displayed on the page signaling the value of the slider 
+      container - The name of the DOM element to attach the sliders too
+ 
 
-You can create multiple sliders in the same container, just make sure they have the same container value. 
-
-The folder CircleSlider just contains all the code in the CircleSliderWidgetDist.js file but split up 
-so it is easier to work on.  
+The folder CircleSlider contains all the code in the CircleSliderWidgetDist.js file but split up 
+so it is easier to digest and work on.  
 
 
 ## License
