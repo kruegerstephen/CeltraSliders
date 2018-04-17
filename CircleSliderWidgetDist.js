@@ -9,6 +9,7 @@ function CreateCircle(options){
     circle.AddEventHandlers();
     circle.CreateDisplayField();
 
+    
     if (document.getElementById(circle.container) === undefined){
         document.body.appendChild(SVG);
     } else {
@@ -47,10 +48,6 @@ function CircleWidget(options){
 
 
 CircleWidget.prototype.DrawCircle = function drawCircle(){
-
-    if (this.minVal >= this.maxVal){
-        this.maxVal = this.minVal + this.maxVal * 2;
-    }
 
     this.slider = createSvgElement("circle", {
         id: this.id,
