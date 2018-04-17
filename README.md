@@ -31,9 +31,9 @@ Set up your options object and call CreateCircle(options), passing the options i
 ```
 
 Some of the less obvious options:
-      smoothscroll - Will smoothly scroll around the circle instead of stepping by angle. The value will still step. Off by default.
-      name - Name that will be displayed on the page signaling the value of the slider 
-      container - The name of the DOM element to attach the sliders too
+* smoothscroll - Will smoothly scroll around the circle instead of stepping by angle. The value will still step. Off by default.
+* name - Name that will be displayed on the page signaling the value of the slider 
+* container - The name of the DOM element to attach the sliders too
  
 
 The folder CircleSlider contains all the code in the CircleSliderWidgetDist.js file but split up 
