@@ -36,10 +36,6 @@ You can create multiple sliders in the same container, just make sure they have 
 The folder CircleSlider just contains all the code in the CircleSliderWidgetDist.js file but split up 
 so it is easier to work on.  
 
-## Authors
-
-* **Stephen Krueger** - *Initial work* - [KruegerStephen](https://github.com/kruegerstephen)
-
 
 ## License
 
