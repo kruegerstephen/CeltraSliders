@@ -92,10 +92,6 @@ CircleWidget.prototype.CreateKnob = function CreateKnob() {
 
 CircleWidget.prototype.AddEventHandlers = function AddEventHandlers() {
 
-
-    SVG.addEventListener("mouseup", end);
-    SVG.addEventListener("mousemove", move);
-
     this.slider.addEventListener("click", move);
     this.slider.addEventListener("touchenter", move);
 
@@ -234,14 +230,18 @@ function generateArc(circle, endAngle) {
 
 
 function createSVG(svgID) {
-    return createSvgElement("svg", {
+    let newSVG = createSvgElement("svg", {
         id: svgID,
         preserveAspectRatio: "xMidYMid slice",
         viewBox: "1 1 1500 1500",
         width: "100",
         height: "100"
-    })
+    });
 
+    newSVG.addEventListener("mouseup", end);
+    newSVG.addEventListener("mousemove", move);
+
+    return newSVG;
 }
 
 
@@ -251,8 +251,7 @@ function circleRadiusSpacer() {
 
 const toRadian = (angle) => angle * Math.PI / 180;
 
-
-/*----------------EVENT HANDLERS------------------------*/
+/*--------------------------------EVENT HANDLERS---------------------------------*/
 
 let allowMove = false;
 
@@ -274,7 +273,6 @@ function move(e) {
         let offset = getEventXYCoord(e);
         let radian = Math.atan2(offset.y, offset.x);
         let angle = radian * 180 / Math.PI;
-        console.log(offset.y, offset.x);
         let stepAngle = getStepAngle(sliderCircle.sCircle, angle);
 
 
@@ -350,7 +348,7 @@ function end(e) {
 
 }
 
-/*------------------------------Value Handler------------------------------*/
+/*-------------------------------Circle Value Handler ------------------------------*/
 
 function valueConversion(fullSlider, stepAngle, angle) {
 
@@ -400,8 +398,7 @@ function displayValue(circle, value) {
     dispDIV.innerHTML = value;
 }
 
-/*--------------------SVG HELPER -------------------------------*/
-
+/*-------------------------------SVG Helper ------------------------*/
 function getAllSVGElements() {
     return Array.from(SVG.childNodes);
 };
@@ -424,11 +421,11 @@ function getPathById(id) {
 
 
 function getSliderPartsByID(clickedSVG, id) {
-
-    if (clickedSVG.nodeName === "svg") {
+    
+    if(clickedSVG.nodeName === "svg"){
         SVG = clickedSVG;
     }
-
+    
     let sliderCircle = getAllCircles.call().filter(child => child.id == id && child.attributes.pID == undefined)[0];
     let sliderKnob = getAllKnobs.call().filter(child => child.attributes.pID.value == id)[0];
     let sliderPath = getAllPaths.call().filter(child => child.attributes.pathID.value == id)[0];

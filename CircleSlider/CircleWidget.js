@@ -92,10 +92,6 @@ CircleWidget.prototype.CreateKnob = function CreateKnob() {
 
 CircleWidget.prototype.AddEventHandlers = function AddEventHandlers() {
 
-
-    SVG.addEventListener("mouseup", end);
-    SVG.addEventListener("mousemove", move);
-
     this.slider.addEventListener("click", move);
     this.slider.addEventListener("touchenter", move);
 
@@ -232,14 +228,18 @@ function generateArc(circle, endAngle){
 
 
 function createSVG(svgID){
-    return createSvgElement("svg", {
+    let newSVG = createSvgElement("svg", {
                             id:svgID,
                             preserveAspectRatio: "xMidYMid slice",
                             viewBox: "1 1 1500 1500",
                             width: "100",
                             height: "100"
-                          })
+                          });
     
+    newSVG.addEventListener("mouseup", end);
+    newSVG.addEventListener("mousemove", move);
+    
+    return newSVG;
 }
 
 

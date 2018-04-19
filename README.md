@@ -46,14 +46,13 @@ Call CreateCircle(), passing the options array and the container in as a paramet
     let container1 = "spinners";
     let container2 = "spinners2";
     
-    
     CreateCircle(optionsArray, container1);
     CreateCircle(optionsArray2, container2);
 
 ```
 
 Some of the less obvious options:
-* smoothscroll - Will smoothly scroll around the circle instead of stepping by angle. The value will still step. Off by default.
+* smoothscroll - Will smoothly scroll around the circle instead of stepping by angle. The value will still step. False by default.
 * name - Name that will be displayed on the page signaling the value of the slider 
 * container - The name of the DOM element to attach the sliders too
  
