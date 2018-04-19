@@ -19,8 +19,12 @@ function getPathById(id) {
 }
 
 
-function getSliderPartsByID(id) {
-
+function getSliderPartsByID(clickedSVG, id) {
+    
+    if(clickedSVG.nodeName === "svg"){
+        SVG = clickedSVG;
+    }
+    
     let sliderCircle = getAllCircles.call().filter(child => child.id == id && child.attributes.pID == undefined)[0];
     let sliderKnob = getAllKnobs.call().filter(child => child.attributes.pID.value == id)[0];
     let sliderPath = getAllPaths.call().filter(child => child.attributes.pathID.value == id)[0];
@@ -55,7 +59,7 @@ function resizeSVG(circle) {
 
     for (let currCircle of allCircles) {
 
-        let slider = getSliderPartsByID(currCircle.id);
+        let slider = getSliderPartsByID(SVG, currCircle.id);
 
         slider.sCircle.cx.baseVal.value = centerContainer;
         slider.sCircle.cy.baseVal.value = centerContainer;

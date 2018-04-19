@@ -11,14 +11,15 @@ These instructions will get you a copy of the project up and running on your loc
 
 Simply include the CircleSliderWidgetDist.js file into your project. 
 
+First create an options array that contains the options for each circle you wish to create
 
-Set up your options object and call CreateCircle(options), passing the options in as a parameter.  
+Set up your options objects and initalize and array with options for each circle.
+Call CreateCircle(), passing the options array and the container in as a parameters.  
 
 ```
    let options =  {
         color: "#FC4346",
         maxVal: 100,
-        container:"spinners",
         minVal: 10,
         step: 5,      
         radius: 100,
@@ -27,7 +28,28 @@ Set up your options object and call CreateCircle(options), passing the options i
         name : "Transportation"
     };    
     
-    CreateCircle(options)
+  
+    let options2 = {
+        color: "#F3781C",
+        maxVal: 100,
+        minVal: 5,
+        step: 10,
+        radius: 150,
+        strokewidth: 30,
+        smoothscroll: true,
+        name: "Food"
+    };
+
+    let optionsArray = [options, options2];
+    let optionsArray2 = [options];
+
+    let container1 = "spinners";
+    let container2 = "spinners2";
+    
+    
+    CreateCircle(optionsArray, container1);
+    CreateCircle(optionsArray2, container2);
+
 ```
 
 Some of the less obvious options:

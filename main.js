@@ -63,12 +63,10 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
 
-
-
-    CreateCircle(options);
-    CreateCircle(options2);
-    CreateCircle(options3);
-    CreateCircle(options4);
-    CreateCircle(options5);
+    var optionsArray = [options, options2, options3, options4, options5];
+    var optionsArray2 = [options, options2];
+   
+    CreateCircle(optionsArray, "spinners");
+    CreateCircle(optionsArray2, "spinners2");
 
 }, false);

@@ -33,15 +33,15 @@
         
           if(eventType != "click"){
              if(moveThisKnob != undefined){     
-                return getSliderPartsByID(moveThisKnob.attributes.pID.value);
+                return getSliderPartsByID(moveThisKnob.parentNode, moveThisKnob.attributes.pID.value);
              }
           }else if(clickedElement.nodeName === "path"){
 
-              return getSliderPartsByID(clickedElement.attributes.pathID.value);
+              return getSliderPartsByID(clickedElement.parentNode, clickedElement.attributes.pathID.value);
 
           }else if (clickedElement.nodeName === "circle"){
 
-              return getSliderPartsByID(clickedElement.id);
+              return getSliderPartsByID(clickedElement.parentNode, clickedElement.id);
           }
     }
 
