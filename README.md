@@ -1,6 +1,6 @@
 # Circular Sliders 
 
-This is a circular slider class written in vanilla javascript. It draws the sliders as SVG elements and accepts a list of options including step, color, max/min value, and container. 
+This is a reusable circular slider class written in vanilla javascript. It draws the sliders as SVG elements and accepts a list of options including step, color, max/min value, and container. 
 Check out the demo [here](https://kruegerstephen.github.io/CeltraSliders/)
 
 ## Getting Started
