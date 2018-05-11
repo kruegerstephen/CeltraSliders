@@ -1,42 +1,3 @@
-function getAllSVGElements() {
-    return Array.from(SVG.childNodes);
-};
-
-function getAllCircles() {
-    return getAllSVGElements.call().filter(child => child.nodeName == "circle" && child.attributes.pID == undefined);
-};
-
-function getAllKnobs() {
-    return getAllSVGElements.call().filter(child => child.attributes.pID != undefined);
-};
-
-function getAllPaths() {
-    return getAllSVGElements.call().filter(child => child.nodeName == "path");
-};
-
-function getPathById(id) {
-    getAllPaths.call().filter(child => child.attributes.pathID.value == id)[0];
-}
-
-
-function getSliderPartsByID(clickedSVG, id) {
-    
-    if(clickedSVG.nodeName === "svg"){
-        SVG = clickedSVG;
-    }
-    
-    let sliderCircle = getAllCircles.call().filter(child => child.id == id && child.attributes.pID == undefined)[0];
-    let sliderKnob = getAllKnobs.call().filter(child => child.attributes.pID.value == id)[0];
-    let sliderPath = getAllPaths.call().filter(child => child.attributes.pathID.value == id)[0];
-    return {
-        sCircle: sliderCircle,
-        sKnob: sliderKnob,
-        sPath: sliderPath
-    }
-}
-
-
-
 function createSvgElement(n, v) {
     n = document.createElementNS("http://www.w3.org/2000/svg", n);
     for (let p in v)
@@ -55,19 +16,18 @@ function resizeSVG(circle) {
 
     let centerContainer = SVG.width.baseVal.value / 2;
 
-    let allCircles = getAllCircles();
+    for (let currCircle of CirclesArray) {
 
-    for (let currCircle of allCircles) {
+        currCircle.slider.cx.baseVal.value = centerContainer;
+        currCircle.slider.cy.baseVal.value = centerContainer;
 
-        let slider = getSliderPartsByID(SVG, currCircle.id);
+        currCircle.cx = centerContainer;
+        currCircle.cy = centerContainer;
+        
+        let knobPositions = getKnobPosition(currCircle.startAngle, currCircle.radius, centerContainer);
 
-        slider.sCircle.cx.baseVal.value = centerContainer;
-        slider.sCircle.cy.baseVal.value = centerContainer;
-
-        let knobPositions = getKnobPosition(slider.sCircle.attributes.startAngle.value, slider.sCircle.r.baseVal.value, centerContainer);
-
-        slider.sKnob.cx.baseVal.value = knobPositions.knobX;
-        slider.sKnob.cy.baseVal.value = knobPositions.knobY;
+        currCircle.knob.cx.baseVal.value = knobPositions.knobX;
+        currCircle.knob.cy.baseVal.value = knobPositions.knobY;
 
     }
 }

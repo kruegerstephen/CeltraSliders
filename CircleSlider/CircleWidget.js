@@ -1,22 +1,24 @@
 let SVG;
+let CirclesArray = [];
 
 function CreateCircle(options, container){
     
     SVG = createSVG(container + "SVG");    
-    options.forEach(function(opt){
-        
+
+    if(document.getElementById(container) === undefined){        
+        console.error("Contianer doesn't exist");
+    }else{
+        document.getElementById(container).appendChild(SVG);
+    }
+
+    options.forEach( opt => {    
         let circle = new CircleWidget(opt);
         circle.DrawCircle();
         circle.CreateKnob();
         circle.AddEventHandlers();
         circle.CreateDisplayField();
 
-        if(document.getElementById(container) === undefined){        
-            document.body.appendChild(SVG);
-        }else{
-            document.getElementById(container).appendChild(SVG);
-        }
-
+        CirclesArray.push(circle);
         //Resize the SVG if the circle will be out of the viewbox
         if(SVG.clientWidth <= circle.radius*2.75 || SVG.clientHeight <= circle.radius*2.75){
            resizeSVG(circle);
@@ -42,7 +44,7 @@ function CircleWidget(options){
         this.smoothscroll  = defaultFlag ? false  : options.smoothscroll;
         this.radius = defaultFlag ? circleRadiusSpacer() : options.radius;
 
-        this.id = "circ" + getAllCircles().length.toString() + SVG.id; 
+        this.id = "circ" + CirclesArray.length.toString() + SVG.id; 
         this.startAngle = toRadian(-90);
         this.cx = SVG.clientWidth/2;
         this.cy = SVG.clientWidth/2;
@@ -133,62 +135,55 @@ CircleWidget.prototype.CreateDisplayField = function CreateDisplayField() {
 };
 
 
-function moveKnob(fullSlider, stepAngle){
+CircleWidget.prototype.MoveKnob = function moveKnob(angle = this.stepAngle){
     
-    let radius = fullSlider.sCircle.r.baseVal.value;
-    let centerX = fullSlider.sCircle.cx.baseVal.value;
+    let stepAngleRad = toRadian(angle+90);
     
-    let stepAngleRad = toRadian(stepAngle);
-    
-    let newY = -Math.round(Math.sin(stepAngleRad)*radius) + centerX;
-    let newX = Math.round(Math.cos(stepAngleRad)*radius)+ centerX;
-    
-    fullSlider.sKnob.cx.baseVal.value = newX;
-    fullSlider.sKnob.cy.baseVal.value = newY;
+    let knobXY = getKnobPosition(stepAngleRad, this.radius, this.cx);
+
+    this.knob.cx.baseVal.value = knobXY.knobX;
+    this.knob.cy.baseVal.value  = knobXY.knobY;
     
     //moves knob to top of svg, which keeps it on top of all other elements
-    SVG.appendChild(fullSlider.sKnob);
+    SVG.appendChild(this.knob);
 }
 
-
-
-function getStepAngle(circle, angle){
+CircleWidget.prototype.GetStepAngle = function getStepAngle(angle){
      
-    let numSteps = ((circle.attributes.maxVal.value-circle.attributes.minVal.value)/circle.attributes.step.value);
+    let numSteps = ((this.maxVal-this.minVal)/this.step);
     
     let stepAngle;
-    
-    if(circle.attributes.smoothscroll.value.toLowerCase() === "true"){
+
+    if(this.smoothscroll){
          stepAngle = (angle/(360/numSteps) * (360/numSteps)); 
     }else{
          stepAngle = Math.round((angle/(360/numSteps))) * (360/numSteps); 
     }
-    
+
     return stepAngle;
+
 }
 
 
-function drawPath(fullSlider, angle){
-         
-     let circle = fullSlider.sCircle;  
-     let strokewidth = circle.attributes["stroke-width"].value;
-     let currPath = getAllPaths().filter(child => child.attributes.pathID.value === circle.id)[0]; 
+CircleWidget.prototype.DrawPath = function drawPath(angle = this.stepAngle){
 
-     let path = createSvgElement("path", {  pathID : circle.id,
+
+    let path = createSvgElement("path", {  pathID : this.id,
                                 fill : "none",
-                                stroke : circle.attributes.strokeColor.value,
+                                stroke : this.color,
                                 "stroke-opacity" : 0.8,
-                                "stroke-width":strokewidth,
-                                d:generateArc(circle, Math.abs(angle-180))});
+                                "stroke-width":this.strokewidth,
+                                d:this.GenerateArc(Math.abs(angle-180))});
 
     
     path.addEventListener("click", move, false);
 
     
-    if(currPath !== undefined ){
-        SVG.replaceChild(path, currPath);
+    if(this.currPath !== undefined ){
+        SVG.replaceChild(path, this.currPath);
+        this.currPath = path;
     }else{
-        circle.firstMove = true;
+        this.currPath = path;
         SVG.appendChild(path);
     }
 }
@@ -196,9 +191,8 @@ function drawPath(fullSlider, angle){
 function getKnobPosition(angle, radius, centerSVG){
     return{
         knobX: Math.round(Math.sin(angle)*radius) + centerSVG,
-        knobY: Math.round(Math.cos(angle)*radius)+ centerSVG
+        knobY: Math.round(Math.cos(angle)*radius) + centerSVG
     };
-    
 }
 
  function findPathXY(centerX, centerY, radius, angle) {
@@ -209,11 +203,11 @@ function getKnobPosition(angle, radius, centerSVG){
       };
     }
 
-function generateArc(circle, endAngle){
+CircleWidget.prototype.GenerateArc = function generateArc(endAngle){
 
-    let radius = circle.r.baseVal.value;
-    let centerX = circle.cx.baseVal.value;
-    let centerY = circle.cx.baseVal.value;
+    let radius  = this.radius;
+    let centerX = this.cx;
+    let centerY = this.cy;
 
     let start = findPathXY(centerX, centerY, radius, 0);
     let end = findPathXY(centerX, centerY, radius, endAngle);

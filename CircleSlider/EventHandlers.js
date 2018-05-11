@@ -12,37 +12,31 @@
                   
                 if(e.type==="click"){ allowMove = false };
                                   
-                let sliderCircle = getCircle(this, e.type);
-                
+                let Circle = getCircle(this, e.type);
                 let offset = getEventXYCoord(e);
                 let radian = Math.atan2(offset.y, offset.x);
                 let angle = radian*180/Math.PI;
-                console.log(offset.y, offset.x);
-                let stepAngle = getStepAngle(sliderCircle.sCircle, angle);
+                
+                Circle.stepAngle = Circle.GetStepAngle(angle);
 
-                  
-                drawPath(sliderCircle, stepAngle);
-                moveKnob(sliderCircle, stepAngle);
-                valueConversion(sliderCircle, stepAngle, angle);
-
+                Circle.DrawPath();
+                Circle.MoveKnob();
+                Circle.SetValue(angle);
               }
             
      }
 
     function getCircle(clickedElement, eventType){
         
-          if(eventType != "click"){
-             if(moveThisKnob != undefined){     
-                return getSliderPartsByID(moveThisKnob.parentNode, moveThisKnob.attributes.pID.value);
-             }
-          }else if(clickedElement.nodeName === "path"){
-
-              return getSliderPartsByID(clickedElement.parentNode, clickedElement.attributes.pathID.value);
-
-          }else if (clickedElement.nodeName === "circle"){
-
-              return getSliderPartsByID(clickedElement.parentNode, clickedElement.id);
-          }
+        if(eventType != "click"){
+            if(moveThisKnob != undefined){
+                return CirclesArray.find(circ => circ.id === moveThisKnob.attributes.pID.value);     
+            }
+        }else if(clickedElement.nodeName === "path"){ 
+            return CirclesArray.find(circ => circ.id === clickedElement.attributes.pathID.value);     
+        }else if (clickedElement.nodeName === "circle"){
+            return CirclesArray.find(circ => circ.id === clickedElement.id);     
+        }
     }
 
 
