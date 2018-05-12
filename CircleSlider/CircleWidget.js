@@ -26,23 +26,36 @@ function CreateCircle(options, container){
     });
 }
 
+defaultOptions = {
+    name: 'circle',
+    color: 'blue',
+    maxVal: 100,
+    minVal: 0,
+    step: 1,
+    container: "spinners",
+    strokewidth: 30,
+    smoothscroll: false,
+    radius: circleRadiusSpacer(),
+}
+
+
 
 function CircleWidget(options){
     
         let defaultFlag = false;
         if(options === undefined){
-            defaultFlag = true;
+            options = defaultOptions;
         }
         
-        this.name   = defaultFlag ? "circle": options.name;
-        this.color  = defaultFlag ? "blue"  : options.color;
-        this.maxVal = defaultFlag ? 100     : options.maxVal;
-        this.minVal = defaultFlag ? 0       : options.minVal;
-        this.step   = defaultFlag ? 1       : options.step;
-        this.container = defaultFlag ? "spinners" : options.container,
-        this.strokewidth = defaultFlag ? 30 : options.strokewidth;
-        this.smoothscroll  = defaultFlag ? false  : options.smoothscroll;
-        this.radius = defaultFlag ? circleRadiusSpacer() : options.radius;
+        this.name   = options.name   ? options.name  : "circle";
+        this.color  = options.color  ? options.color  : "blue";
+        this.maxVal = options.maxVal ? options.maxVal : 100;
+        this.minVal = options.minVal ? options.minVal : 0;
+        this.step   = options.step   ? options.step   : 1;
+        this.container = options.container ? options.container : "spinners";
+        this.strokewidth = options.strokewidth ? options.strokewidth : 30;
+        this.smoothscroll  = options.smoothscroll ? options.smoothscroll : false;
+        this.radius = options.radius ? options.radius : circleRadiusSpacer();
 
         this.id = "circ" + CirclesArray.length.toString() + SVG.id; 
         this.startAngle = toRadian(-90);

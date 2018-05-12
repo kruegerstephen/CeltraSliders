@@ -12,20 +12,20 @@ CircleWidget.prototype.SetValue = function valueConversion(angle){
             value = this.maxVal;
             this.MoveKnob(maxAngle);
             this.DrawPath(maxAngle);
-       }else if(value + this.minVal == this.step && this.minVal < this.step){
+    }else if(value + this.minVal == this.step && this.minVal < this.step){
            value = this.minVal;
-       }else if(value + this.minVal == this.maxVal && 0 === (this.stepAngle+180)/360){
+    }else if(value + this.minVal == this.maxVal && 0 === (this.stepAngle+180)/360){
            value = this.maxVal;
            this.MoveKnob(maxAngle);
            this.DrawPath(maxAngle);
-       }
-        else{
-            if(value < this.step){
-                value = this.minVal;
-            }else{
-                value = this.minVal + floorVal;
-            }
+    }
+    else{
+        if(value < this.step){
+            value = this.minVal;
+        }else{
+             value = this.minVal + floorVal;
         }
+    }
     
     this.DisplayValue(value);
 }

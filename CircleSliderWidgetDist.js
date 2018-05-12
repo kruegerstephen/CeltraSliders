@@ -4,8 +4,14 @@ let CirclesArray = [];
 function CreateCircle(options, container){
     
     SVG = createSVG(container + "SVG");    
-    options.forEach( opt => {
-        
+
+    if(document.getElementById(container) === undefined){        
+        console.error("Contianer doesn't exist");
+    }else{
+        document.getElementById(container).appendChild(SVG);
+    }
+
+    options.forEach( opt => {    
         let circle = new CircleWidget(opt);
         circle.DrawCircle();
         circle.CreateKnob();
@@ -13,13 +19,6 @@ function CreateCircle(options, container){
         circle.CreateDisplayField();
 
         CirclesArray.push(circle);
-
-        if(document.getElementById(container) === undefined){        
-            console.error("Contianer doesn't exist");
-        }else{
-            document.getElementById(container).appendChild(SVG);
-        }
-
         //Resize the SVG if the circle will be out of the viewbox
         if(SVG.clientWidth <= circle.radius*2.75 || SVG.clientHeight <= circle.radius*2.75){
            resizeSVG(circle);
@@ -27,23 +26,36 @@ function CreateCircle(options, container){
     });
 }
 
+defaultOptions = {
+    name: 'circle',
+    color: 'blue',
+    maxVal: 100,
+    minVal: 0,
+    step: 1,
+    container: "spinners",
+    strokewidth: 30,
+    smoothscroll: false,
+    radius: circleRadiusSpacer(),
+}
+
+
 
 function CircleWidget(options){
     
         let defaultFlag = false;
         if(options === undefined){
-            defaultFlag = true;
+            options = defaultOptions;
         }
         
-        this.name   = defaultFlag ? "circle": options.name;
-        this.color  = defaultFlag ? "blue"  : options.color;
-        this.maxVal = defaultFlag ? 100     : options.maxVal;
-        this.minVal = defaultFlag ? 0       : options.minVal;
-        this.step   = defaultFlag ? 1       : options.step;
-        this.container = defaultFlag ? "spinners" : options.container,
-        this.strokewidth = defaultFlag ? 30 : options.strokewidth;
-        this.smoothscroll  = defaultFlag ? false  : options.smoothscroll;
-        this.radius = defaultFlag ? circleRadiusSpacer() : options.radius;
+        this.name   = options.name   ? options.name  : "circle";
+        this.color  = options.color  ? options.color  : "blue";
+        this.maxVal = options.maxVal ? options.maxVal : 100;
+        this.minVal = options.minVal ? options.minVal : 0;
+        this.step   = options.step   ? options.step   : 1;
+        this.container = options.container ? options.container : "spinners";
+        this.strokewidth = options.strokewidth ? options.strokewidth : 30;
+        this.smoothscroll  = options.smoothscroll ? options.smoothscroll : false;
+        this.radius = options.radius ? options.radius : circleRadiusSpacer();
 
         this.id = "circ" + CirclesArray.length.toString() + SVG.id; 
         this.startAngle = toRadian(-90);
@@ -235,20 +247,20 @@ CircleWidget.prototype.SetValue = function valueConversion(angle){
             value = this.maxVal;
             this.MoveKnob(maxAngle);
             this.DrawPath(maxAngle);
-       }else if(value + this.minVal == this.step && this.minVal < this.step){
+    }else if(value + this.minVal == this.step && this.minVal < this.step){
            value = this.minVal;
-       }else if(value + this.minVal == this.maxVal && 0 === (this.stepAngle+180)/360){
+    }else if(value + this.minVal == this.maxVal && 0 === (this.stepAngle+180)/360){
            value = this.maxVal;
            this.MoveKnob(maxAngle);
            this.DrawPath(maxAngle);
-       }
-        else{
-            if(value < this.step){
-                value = this.minVal;
-            }else{
-                value = this.minVal + floorVal;
-            }
+    }
+    else{
+        if(value < this.step){
+            value = this.minVal;
+        }else{
+             value = this.minVal + floorVal;
         }
+    }
     
     this.DisplayValue(value);
 }

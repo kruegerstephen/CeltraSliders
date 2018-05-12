@@ -1,15 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     let options = {
-        color: "#FC4346",
-        maxVal: 100,
-        container: "spinners",
-        minVal: 10,
-        step: 7,
-        radius: 100,
-        strokewidth: 30,
-        smoothscroll: false,
-        name: "Transportation"
+       
     };
 
     let options2 = {
