@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var optionsArray = [options, options2, options3, options4, options5];
 
    
-    CreateCircle(optionsArray, "spinners");
+    CreateCircles(optionsArray, "spinners");
 
 
 }, false);

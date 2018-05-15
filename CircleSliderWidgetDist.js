@@ -1,9 +1,10 @@
-let SVG;
-let CirclesArray = [];
 
-function CreateCircle(options, container){
+let CirclesArray = [];
+let allowMove = false;
+
+function CreateCircles(options, container){
     
-    SVG = createSVG(container + "SVG");    
+    let SVG = createSVG(container + "SVG");    
 
     if(document.getElementById(container) === undefined){        
         console.error("Contianer doesn't exist");
@@ -12,13 +13,14 @@ function CreateCircle(options, container){
     }
 
     options.forEach( opt => {    
-        let circle = new CircleWidget(opt);
+        let circle = new CircleWidget(opt, SVG);
         circle.DrawCircle();
         circle.CreateKnob();
         circle.AddEventHandlers();
         circle.CreateDisplayField();
 
         CirclesArray.push(circle);
+
         //Resize the SVG if the circle will be out of the viewbox
         if(SVG.clientWidth <= circle.radius*2.75 || SVG.clientHeight <= circle.radius*2.75){
            resizeSVG(circle);
@@ -38,16 +40,13 @@ defaultOptions = {
     radius: circleRadiusSpacer(),
 }
 
-
-
-function CircleWidget(options){
+function CircleWidget(options, SVG){
     
-        let defaultFlag = false;
         if(options === undefined){
             options = defaultOptions;
         }
         
-        this.name   = options.name   ? options.name  : "circle";
+        this.name   = options.name   ? options.name   : "circle";
         this.color  = options.color  ? options.color  : "blue";
         this.maxVal = options.maxVal ? options.maxVal : 100;
         this.minVal = options.minVal ? options.minVal : 0;
@@ -56,6 +55,7 @@ function CircleWidget(options){
         this.strokewidth = options.strokewidth ? options.strokewidth : 30;
         this.smoothscroll  = options.smoothscroll ? options.smoothscroll : false;
         this.radius = options.radius ? options.radius : circleRadiusSpacer();
+        this.parentSVG = SVG;
 
         this.id = "circ" + CirclesArray.length.toString() + SVG.id; 
         this.startAngle = toRadian(-90);
@@ -84,7 +84,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle() {
         "stroke-width": this.strokewidth
     });
 
-    SVG.appendChild(this.slider);
+    this.parentSVG.appendChild(this.slider);
 
 };
 
@@ -102,7 +102,7 @@ CircleWidget.prototype.CreateKnob = function CreateKnob() {
         stroke: "none"
     });
 
-    SVG.appendChild(this.knob);
+    this.parentSVG.appendChild(this.knob);
 }
 
 CircleWidget.prototype.AddEventHandlers = function AddEventHandlers() {
@@ -155,10 +155,10 @@ CircleWidget.prototype.MoveKnob = function moveKnob(angle = this.stepAngle){
     let knobXY = getKnobPosition(stepAngleRad, this.radius, this.cx);
 
     this.knob.cx.baseVal.value = knobXY.knobX;
-    this.knob.cy.baseVal.value  = knobXY.knobY;
+    this.knob.cy.baseVal.value = knobXY.knobY;
     
     //moves knob to top of svg, which keeps it on top of all other elements
-    SVG.appendChild(this.knob);
+    this.parentSVG.appendChild(this.knob);
 }
 
 CircleWidget.prototype.GetStepAngle = function getStepAngle(angle){
@@ -193,28 +193,14 @@ CircleWidget.prototype.DrawPath = function drawPath(angle = this.stepAngle){
 
     
     if(this.currPath !== undefined ){
-        SVG.replaceChild(path, this.currPath);
+        this.parentSVG.replaceChild(path, this.currPath);
         this.currPath = path;
     }else{
         this.currPath = path;
-        SVG.appendChild(path);
+        this.parentSVG.appendChild(path);
     }
 }
 
-function getKnobPosition(angle, radius, centerSVG){
-    return{
-        knobX: Math.round(Math.sin(angle)*radius) + centerSVG,
-        knobY: Math.round(Math.cos(angle)*radius) + centerSVG
-    };
-}
-
- function findPathXY(centerX, centerY, radius, angle) {
-      let radians = toRadian(angle-180);
-      return {
-        x: centerX + (radius * Math.cos(radians)),
-        y: centerY + (radius * Math.sin(radians))
-      };
-    }
 
 CircleWidget.prototype.GenerateArc = function generateArc(endAngle){
 
@@ -232,6 +218,7 @@ CircleWidget.prototype.GenerateArc = function generateArc(endAngle){
         "A", radius, radius, 0, largeArcFlag, 0, start.x, start.y
     ].join(" ");
 }
+
 
 CircleWidget.prototype.SetValue = function valueConversion(angle){
     
@@ -272,37 +259,9 @@ CircleWidget.prototype.DisplayValue = function displayValue(value){
 }
 
 
-
-
-function createSVG(svgID){
-    let newSVG = createSvgElement("svg", {
-                            id:svgID,
-                            preserveAspectRatio: "xMidYMid slice",
-                            viewBox: "1 1 1500 1500",
-                            width: "100",
-                            height: "100"
-                          });
-    
-    newSVG.addEventListener("mouseup", end);
-    newSVG.addEventListener("mousemove", move);
-    
-    return newSVG;
-}
-
-
-function circleRadiusSpacer(){    
-    return 50 + ((CirclesArray.length)+1) * 50;
-}
-
-let allowMove = false;
-
 function start(e){
   moveThisKnob = this;
   allowMove = true;
-}
-
-function end(e){
-    allowMove = false;  
 }
 
 function move(e){
@@ -313,7 +272,7 @@ function move(e){
             if(e.type==="click"){ allowMove = false };
                               
             let Circle = getCircle(this, e.type);
-            let offset = getEventXYCoord(e);
+            let offset = getEventXYCoord(e, Circle.parentSVG);
             let radian = Math.atan2(offset.y, offset.x);
             let angle = radian*180/Math.PI;
             
@@ -340,7 +299,7 @@ function getCircle(clickedElement, eventType){
 }
 
 
-function getEventXYCoord(e){
+function getEventXYCoord(e, SVG){
     
     let globalPointsFlag = false;
     let containerCenterW;
@@ -348,7 +307,7 @@ function getEventXYCoord(e){
     /*hack for firefox - expensive call so will only use when necessary*/
     if(SVG.clientWidth === 0){
         globalPointsFlag = true;
-        var globalPoint = getGlobalPoint(e);
+        var globalPoint = getGlobalPoint(e, SVG);
         containerWidth = SVG.attributes.width.value/2;
     }else{
         containerCenterW = SVG.clientWidth/2;
@@ -377,13 +336,53 @@ function getEventXYCoord(e){
       }
 }
 
-function getGlobalPoint(e){
+function getGlobalPoint(e, SVG){
      var pt = SVG.createSVGPoint();
         pt.x = e.clientX;
         pt.y = e.clientY;
      return pt.matrixTransform(SVG.getScreenCTM().inverse());
 }
 
+function end(e){
+  allowMove = false;
+}
+
+function getKnobPosition(angle, radius, centerSVG){
+    return{
+        knobX: Math.round(Math.sin(angle)*radius) + centerSVG,
+        knobY: Math.round(Math.cos(angle)*radius) + centerSVG
+    };
+}
+
+ function findPathXY(centerX, centerY, radius, angle) {
+      let radians = toRadian(angle-180);
+      return {
+        x: centerX + (radius * Math.cos(radians)),
+        y: centerY + (radius * Math.sin(radians))
+      };
+}
+
+
+function createSVG(svgID){
+    let newSVG = createSvgElement("svg", {
+                            id:svgID,
+                            preserveAspectRatio: "xMidYMid slice",
+                            viewBox: "1 1 1500 1500",
+                            width: "100",
+                            height: "100"
+                          });
+    
+    newSVG.addEventListener("mouseup", end);
+    newSVG.addEventListener("mousemove", move);
+    
+    return newSVG;
+}
+
+function circleRadiusSpacer(){    
+    return 50 + ((CirclesArray.length)+1) * 50;
+}
+
+const toRadian = (angle) => angle * Math.PI/180;
 
 function createSvgElement(n, v) {
     n = document.createElementNS("http://www.w3.org/2000/svg", n);
@@ -392,16 +391,16 @@ function createSvgElement(n, v) {
     return n
 };
 
-
 /*resizes the svg to fit the current circle*/
-function resizeSVG(circle) {
+function resizeSVG(circle, SVG) {
 
-    SVG.width.baseVal.value = circle.radius * 2.75;
-    SVG.height.baseVal.value = circle.radius * 2.75;
+    circle.parentSVG.width.baseVal.value = circle.radius * 2.75;
+    circle.parentSVG.height.baseVal.value = circle.radius * 2.75;
+
     let viewBoxString = "0 0 " + circle.radius * 2.75 + " " + circle.radius * 2.75;
-    SVG.setAttribute("viewBox", viewBoxString)
+    circle.parentSVG.setAttribute("viewBox", viewBoxString)
 
-    let centerContainer = SVG.width.baseVal.value / 2;
+    let centerContainer = circle.parentSVG.width.baseVal.value / 2;
 
     for (let currCircle of CirclesArray) {
 
@@ -418,7 +417,3 @@ function resizeSVG(circle) {
 
     }
 }
-
-const toRadian = (angle) => angle * Math.PI/180;
-
-

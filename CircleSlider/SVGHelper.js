@@ -7,14 +7,14 @@ function createSvgElement(n, v) {
 
 
 /*resizes the svg to fit the current circle*/
-function resizeSVG(circle) {
+function resizeSVG(circle, SVG) {
 
-    SVG.width.baseVal.value = circle.radius * 2.75;
-    SVG.height.baseVal.value = circle.radius * 2.75;
+    circle.parentSVG.width.baseVal.value = circle.radius * 2.75;
+    circle.parentSVG.height.baseVal.value = circle.radius * 2.75;
     let viewBoxString = "0 0 " + circle.radius * 2.75 + " " + circle.radius * 2.75;
-    SVG.setAttribute("viewBox", viewBoxString)
+    circle.parentSVG.setAttribute("viewBox", viewBoxString)
 
-    let centerContainer = SVG.width.baseVal.value / 2;
+    let centerContainer = circle.parentSVG.width.baseVal.value / 2;
 
     for (let currCircle of CirclesArray) {
 

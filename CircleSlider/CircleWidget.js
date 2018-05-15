@@ -1,9 +1,9 @@
-let SVG;
+
 let CirclesArray = [];
 
-function CreateCircle(options, container){
+function CreateCircles(options, container){
     
-    SVG = createSVG(container + "SVG");    
+    let SVG = createSVG(container + "SVG");    
 
     if(document.getElementById(container) === undefined){        
         console.error("Contianer doesn't exist");
@@ -17,7 +17,7 @@ function CreateCircle(options, container){
         circle.CreateKnob();
         circle.AddEventHandlers();
         circle.CreateDisplayField();
-
+        circle.parentSVG = SVG;
         CirclesArray.push(circle);
         //Resize the SVG if the circle will be out of the viewbox
         if(SVG.clientWidth <= circle.radius*2.75 || SVG.clientHeight <= circle.radius*2.75){
@@ -42,7 +42,6 @@ defaultOptions = {
 
 function CircleWidget(options){
     
-        let defaultFlag = false;
         if(options === undefined){
             options = defaultOptions;
         }
@@ -57,7 +56,7 @@ function CircleWidget(options){
         this.smoothscroll  = options.smoothscroll ? options.smoothscroll : false;
         this.radius = options.radius ? options.radius : circleRadiusSpacer();
 
-        this.id = "circ" + CirclesArray.length.toString() + SVG.id; 
+        this.id = "circ" + CirclesArray.length.toString() + this.parentSVG.id; 
         this.startAngle = toRadian(-90);
         this.cx = SVG.clientWidth/2;
         this.cy = SVG.clientWidth/2;
@@ -84,7 +83,7 @@ CircleWidget.prototype.DrawCircle = function drawCircle() {
         "stroke-width": this.strokewidth
     });
 
-    SVG.appendChild(this.slider);
+    this.parentSVG.appendChild(this.slider);
 
 };
 
@@ -102,7 +101,7 @@ CircleWidget.prototype.CreateKnob = function CreateKnob() {
         stroke: "none"
     });
 
-    SVG.appendChild(this.knob);
+    this.parentSVG.appendChild(this.knob);
 }
 
 CircleWidget.prototype.AddEventHandlers = function AddEventHandlers() {
@@ -155,10 +154,10 @@ CircleWidget.prototype.MoveKnob = function moveKnob(angle = this.stepAngle){
     let knobXY = getKnobPosition(stepAngleRad, this.radius, this.cx);
 
     this.knob.cx.baseVal.value = knobXY.knobX;
-    this.knob.cy.baseVal.value  = knobXY.knobY;
+    this.knob.cy.baseVal.value = knobXY.knobY;
     
     //moves knob to top of svg, which keeps it on top of all other elements
-    SVG.appendChild(this.knob);
+    this.parentSVG.appendChild(this.knob);
 }
 
 CircleWidget.prototype.GetStepAngle = function getStepAngle(angle){
@@ -193,11 +192,11 @@ CircleWidget.prototype.DrawPath = function drawPath(angle = this.stepAngle){
 
     
     if(this.currPath !== undefined ){
-        SVG.replaceChild(path, this.currPath);
+        this.parentSVG.replaceChild(path, this.currPath);
         this.currPath = path;
     }else{
         this.currPath = path;
-        SVG.appendChild(path);
+        this.parentSVG.appendChild(path);
     }
 }
 
@@ -251,7 +250,7 @@ function createSVG(svgID){
 
 
 function circleRadiusSpacer(){    
-    return 50 + ((getAllCircles().length)+1) * 50;
+    return 50 + ((CirclesArray.length)+1) * 50;
 }
 
 const toRadian = (angle) => angle * Math.PI/180;

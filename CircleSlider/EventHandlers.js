@@ -13,7 +13,7 @@
                 if(e.type==="click"){ allowMove = false };
                                   
                 let Circle = getCircle(this, e.type);
-                let offset = getEventXYCoord(e);
+                let offset = getEventXYCoord(e, Circle.parentSVG);
                 let radian = Math.atan2(offset.y, offset.x);
                 let angle = radian*180/Math.PI;
                 
@@ -40,7 +40,7 @@
     }
 
 
-    function getEventXYCoord(e){
+    function getEventXYCoord(e, SVG){
         
         let globalPointsFlag = false;
         let containerCenterW;
@@ -48,7 +48,7 @@
         /*hack for firefox - expensive call so will only use when necessary*/
         if(SVG.clientWidth === 0){
             globalPointsFlag = true;
-            var globalPoint = getGlobalPoint(e);
+            var globalPoint = getGlobalPoint(e, SVG);
             containerWidth = SVG.attributes.width.value/2;
         }else{
             containerCenterW = SVG.clientWidth/2;
@@ -77,7 +77,7 @@
           }
     }
 
-    function getGlobalPoint(e){
+    function getGlobalPoint(e, SVG){
          var pt = SVG.createSVGPoint();
             pt.x = e.clientX;
             pt.y = e.clientY;
